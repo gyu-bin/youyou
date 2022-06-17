@@ -161,17 +161,24 @@ const ReplyPage:React.FC<NativeStackScreenProps<any, "ReplyPage">> = ({
         setRefreshing(false);
     };
 
-    const Reply=()=>{
-        return(
-            <FieldInput
-                placeholder="30자 이내로 간단 소개글을 적어주세요."
-                textAlign="left"
-                multiline={true}
-                maxLength={30}
-                textAlignVertical="top"
-            />
-        )
+    const getReply=async ()=>{
+        try{
+            setLoading(true);
+            const response= await axios.get(
+                `http://3.39.190.23:8080/api/feeds`
+            )
+            setData(response.data.data)
+            console.log(data)
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
     }
+
+    useEffect(()=>{
+        getReply();
+    },[]);
 
     const goToHome = () => {
         navigate("Tabs",{
@@ -222,8 +229,6 @@ const ReplyPage:React.FC<NativeStackScreenProps<any, "ReplyPage">> = ({
             </TitleView>
                 <UnderBar/>
             <FlatList
-                refreshing={refreshing}
-                onRefresh={onRefresh}
                 data={Home}
                 keyExtractor={(item, index) => index + ""}
                 renderItem={({item})=>(
@@ -235,7 +240,7 @@ const ReplyPage:React.FC<NativeStackScreenProps<any, "ReplyPage">> = ({
                                 <Comment>123</Comment>
                             </CommentMent>
                             <CommentRemainder>
-                                <Time>40분</Time>
+                                <Time>{rand(1,60)}분</Time>
                                 <Like>좋아요 {rand(1,100)} 개</Like>
                                 <TouchableOpacity onPress={()=>goToHome(item)}>
                                     <Text>답글 달기</Text>

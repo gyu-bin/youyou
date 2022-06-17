@@ -24,7 +24,7 @@ const TopTab = createMaterialTopTabNavigator();
 import Icon from 'react-native-vector-icons/Ionicons'
 const Wrapper = styled.View`
   flex: 1;
-  top: 2%;
+  top: 4%;
 `;
 const SearchArea=styled.View`
   height: 40px;

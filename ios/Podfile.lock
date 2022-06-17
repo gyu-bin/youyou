@@ -3,26 +3,28 @@ PODS:
   - boost-for-react-native (1.63.0)
   - CocoaAsyncSocket (7.6.5)
   - DoubleConversion (1.1.6)
-  - EXApplication (4.0.1):
+  - EXApplication (4.0.2):
     - ExpoModulesCore
-  - EXConstants (13.0.1):
+  - EXBlur (11.0.0):
     - ExpoModulesCore
-  - EXErrorRecovery (3.0.4):
+  - EXConstants (13.0.2):
     - ExpoModulesCore
-  - EXFileSystem (13.1.2):
+  - EXErrorRecovery (3.0.5):
     - ExpoModulesCore
-  - EXFont (10.0.4):
+  - EXFileSystem (13.1.4):
+    - ExpoModulesCore
+  - EXFont (10.0.5):
     - ExpoModulesCore
   - EXImagePicker (12.0.2):
     - ExpoModulesCore
-  - EXKeepAwake (10.0.1):
+  - EXKeepAwake (10.0.2):
     - ExpoModulesCore
-  - Expo (44.0.5):
+  - Expo (44.0.6):
     - ExpoModulesCore
-  - ExpoModulesCore (0.6.4):
+  - ExpoModulesCore (0.6.5):
     - React-Core
     - ReactCommon/turbomodule/core
-  - EXSplashScreen (0.14.1):
+  - EXSplashScreen (0.14.2):
     - ExpoModulesCore
     - React-Core
   - FBLazyVector (0.64.3)
@@ -317,7 +319,7 @@ PODS:
     - React-jsi (= 0.64.3)
     - React-perflogger (= 0.64.3)
   - React-jsinspector (0.64.3)
-  - react-native-image-picker (4.7.3):
+  - react-native-image-picker (4.8.4):
     - React-Core
   - react-native-pager-view (5.4.9):
     - React-Core
@@ -389,11 +391,11 @@ PODS:
     - React-cxxreact (= 0.64.3)
     - React-jsi (= 0.64.3)
     - React-perflogger (= 0.64.3)
-  - RNCAsyncStorage (1.17.5):
+  - RNCAsyncStorage (1.17.6):
     - React-Core
   - RNCPicker (2.2.1):
     - React-Core
-  - RNGestureHandler (2.3.2):
+  - RNGestureHandler (2.4.2):
     - React-Core
   - RNScreens (3.10.2):
     - React-Core
@@ -407,6 +409,7 @@ PODS:
 DEPENDENCIES:
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - EXApplication (from `../node_modules/expo-application/ios`)
+  - EXBlur (from `../node_modules/expo-blur/ios`)
   - EXConstants (from `../node_modules/expo-constants/ios`)
   - EXErrorRecovery (from `../node_modules/expo-error-recovery/ios`)
   - EXFileSystem (from `../node_modules/expo-file-system/ios`)
@@ -505,6 +508,8 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec"
   EXApplication:
     :path: "../node_modules/expo-application/ios"
+  EXBlur:
+    :path: "../node_modules/expo-blur/ios"
   EXConstants:
     :path: "../node_modules/expo-constants/ios"
   EXErrorRecovery:
@@ -603,18 +608,19 @@ SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
-  EXApplication: bdc8dc27713235565da1029a34385229f31b8e08
-  EXConstants: 6966f4fa7a22770dd240a66d029819ff94c748c9
-  EXErrorRecovery: deea88a01d38f8b1c1181b4e1d179b0ba0e4bb5b
-  EXFileSystem: e8013deaa114cab168a6f53be956b9334c3d02cf
-  EXFont: 1fb13af43dc517c01c0ff21a6e32f9f9bf2ea602
+  EXApplication: 54fe5bd6268d697771645e8f1aef8b806a65247a
+  EXBlur: 82055865de17cf2cf797ff064c50fb59fcbe703f
+  EXConstants: 88bf79622fbd9b476c96d8ec57fe97ca44fe8e3c
+  EXErrorRecovery: b0d7582714a2cc896e94a2308a356f94dbf14ef7
+  EXFileSystem: 08a3033ac372b6346becf07839e1ccef26fb1058
+  EXFont: 2597c10ac85a69d348d44d7873eccf5a7576ef5e
   EXImagePicker: bf4d62532cc2bf217edbe4abbb0014e73e079eac
-  EXKeepAwake: b571c2ad8323b2fced6e907766e2549f75119471
-  Expo: 337c72b7e9314e93023af79c875930db8e008275
-  ExpoModulesCore: 64abda7af7cf659d2fa092934e29c6f4ea7e849f
-  EXSplashScreen: 7872675b95bb07c25f922b3d3dfae70c76fb5a00
+  EXKeepAwake: bf48d7f740a5cd2befed6cf9a49911d385c6c47d
+  Expo: 534e51e607aba8229293297da5585f4b26f50fa1
+  ExpoModulesCore: 32c0ccb47f477d330ee93db72505380adf0de09a
+  EXSplashScreen: 21669e598804ee810547dbb6692c8deb5dd8dbf3
   FBLazyVector: c71c5917ec0ad2de41d5d06a5855f6d5eda06971
-  FBReactNativeSpec: 8f3574caa091771a3bbdfa25c9dbfb82deae973d
+  FBReactNativeSpec: 8336a595d5c35694be6b27b3453f70d585bec3ae
   Flipper: d3da1aa199aad94455ae725e9f3aa43f3ec17021
   Flipper-DoubleConversion: 38631e41ef4f9b12861c67d17cb5518d06badc41
   Flipper-Folly: 755929a4f851b2fb2c347d533a23f191b008554c
@@ -646,7 +652,7 @@ SPEC CHECKSUMS:
   React-jsi: a8b09c29521c798f1783348b37b511ba7b3dbeb3
   React-jsiexecutor: df6abc9fafbecb8e5b7a5fbc5e6d4bd017d594d5
   React-jsinspector: 34e23860273a23695342f58eed3ffd3ba10c31e0
-  react-native-image-picker: 4e6008ad8c2321622affa2c85432a5ebd02d480c
+  react-native-image-picker: cffb727cf2f59bd5c0408e30b3dbe0b935f88835
   react-native-pager-view: 3ee7d4c7697fb3ef788346e834a60cca97ed8540
   react-native-pinchable: b4381b0807d15c12b14bfacd927128f52d96f0f1
   react-native-safe-area-context: 584dc04881deb49474363f3be89e4ca0e854c057
@@ -662,9 +668,9 @@ SPEC CHECKSUMS:
   React-RCTVibration: c7f845861e79eae13dc1e8217a3cf47a3945b504
   React-runtimeexecutor: 493d9abb8b23c3f84e19ae221eeba92cadcb70dc
   ReactCommon: 8fea6422328e2fc093e25c9fac67adbcf0f04fb4
-  RNCAsyncStorage: 81187912cc9a5c2591ddb161e03e587688afb764
+  RNCAsyncStorage: 466b9df1a14bccda91da86e0b7d9a345d78e1673
   RNCPicker: cb57c823d5ce8d2d0b5dfb45ad97b737260dc59e
-  RNGestureHandler: 6e757e487a4834e7280e98e9bac66d2d9c575e9c
+  RNGestureHandler: 61628a2c859172551aa2100d3e73d1e57878392f
   RNScreens: d6da2b9e29cf523832c2542f47bf1287318b1868
   RNVectorIcons: 7923e585eaeb139b9f4531d25a125a1500162a0b
   Yoga: e6ecf3fa25af9d4c87e94ad7d5d292eedef49749
@@ -672,4 +678,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 12cade78fde9a117e4a8b7684446b92f8c15a914
 
-COCOAPODS: 1.11.2
+COCOAPODS: 1.11.3

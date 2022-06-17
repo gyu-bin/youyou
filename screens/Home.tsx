@@ -7,15 +7,14 @@ import {
     Text,
     TouchableOpacity,
     Button,
-    Dimensions,
-    TouchableWithoutFeedback, Alert, Animated, Share, Platform
+    Dimensions, Modal,
+    TouchableWithoutFeedback, Alert, Slider, Image, ScrollView, useWindowDimensions, Pressable, Share, Platform
 } from 'react-native';
 import styled from "styled-components/native";
 import Swiper from "react-native-swiper";
-import Modal from "react-native-modal";
-import {StatusBar} from "expo-status-bar";
-
-import Icon from 'react-native-vector-icons/Ionicons'
+import { SliderBox } from "react-native-image-slider-box";
+import axios from "axios";
+import Icon from "react-native-vector-icons/Ionicons";
 import {Ionicons} from "@expo/vector-icons";
 
 const Container = styled.SafeAreaView`
@@ -23,6 +22,7 @@ const Container = styled.SafeAreaView`
   flex-direction: column;
   height: 100%;
 `;
+
 const Loader = styled.View`
   flex: 1;
   justify-content: center;
@@ -38,7 +38,7 @@ const MainLogo=styled.Text`
   justify-content: space-between;
   background-color: white;
   display: flex;
-  height: 55px;
+  height: 50px;
   left: 10px;
 `
 const PlusFeed=styled.Button`
@@ -53,20 +53,33 @@ const HeaderStyle=styled.View`
 const HeaderText=styled.Text`
   flex-direction: row;
   left: 10px;
-  height: 56px;
+  top: 2%;
 `
-
-const UserId=styled.TouchableOpacity`
+const UserId=styled.Text`
   color: black;
   font-weight: bold;
   font-size: 15px;
-  margin-left: 20px;
-  top: 10px;
+  margin-left: 10px;
+`
+const CtrgArea=styled.View`
+  margin-left: 5px;
+  background-color: lightgray;
+  border-radius: 5px;
+  top: 2px;
+`
+const CtgrText= styled.Text`
+  margin: 3px 5px 3px 5px;
+  color: white;
 `
 
 //ModalStyle
 const ModalStyle=styled.Modal`
-
+  
+`
+const PeedId=styled.Text`
+  color: black;
+  font-size: 15px;
+  left: 7px;
 `
 
 const ImagePrint=styled.Image`
@@ -79,13 +92,15 @@ const ImagePrint=styled.Image`
 const TextArea=styled.View`
   background-color: white;
   flex-direction: row;
-  margin-top: 5px;
+  top: -5px;
+  width: 100%;
 `
 const LogoImage=styled.Image`
   width: 40px;
   height: 40px;
   right: 20px;
   border-radius: 20px;
+  border: lightgray 2px solid;
 `
 
 const LikeImg=styled.Image`
@@ -96,20 +111,35 @@ const LikeImg=styled.Image`
 `
 
 const LikeMent=styled.Text`
+  flex-direction: row;
   color: black;
   margin-left: 10px;
+  background-color: beige;
 `
+
+const LikeArea=styled.View`
+  flex-direction: row;
+`
+const ReplyArea=styled.View`
+  flex-direction: row;
+`
+const DataArea=styled.View`
+  
+`
+
 const BoldText1=styled.TouchableOpacity`
   font-weight: bold;
 `
 const BoldText2=styled.Text`
-  font-weight: bold;
+  font-weight: normal;
+  top: 5px;
 `
 const ContentMent=styled.View`
   background-color: white;
   flex-direction: row;
+  left: 10px;
 `
-const MentId=styled.TouchableOpacity`
+const MentId=styled.Text`
   color: black;
   font-weight: bold;
   font-size: 15px;
@@ -119,6 +149,9 @@ const Ment = styled.Text`
   color: black;
   margin-left: 10px;
   width: 200px;
+`
+const HashTag=styled.Text`
+  color: rgb(99,171,255);
 `
 
 const Wrapper = styled.View`
@@ -130,7 +163,35 @@ const OptionArea = styled.View`
   flex-direction: row;
   position: relative;
 `
+//ModalStyle
 
+const ModalArea = styled.View`
+
+`
+
+const CenteredView=styled.View`
+  flex: 1;
+  justify-content: flex-end;
+  align-items: center;
+`
+
+const ModalView=styled.View`
+  background-color: grey;
+  border-radius: 20px;
+  padding: 35px;
+  align-items: center;
+  opacity: 0.9;
+  width: 100%;
+`
+
+const ModalText=styled.Text`
+  font-weight: bold;
+  text-align: center;
+  color: white;
+  font-size: 20px;
+  margin: 15px;
+  width: 90%;
+`
 const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get("window");
 
 //Img Slider
@@ -147,9 +208,7 @@ const ImgItem = styled.View`
 `;
 
 const ImgSource = styled.Image`
-  width: 390px;
-  height: 100%;
-  border-radius: 20px;
+  border-radius: 50px;
 `;
 
 const ModalBtn=styled.View`
@@ -171,6 +230,7 @@ const FloatingButton = styled.TouchableOpacity`
   align-items: center;
   font-size: 10px;
 `;
+
 //Number
 const rand = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
 
@@ -184,42 +244,36 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
     const [Home, setHome] = useState([{}]);
     const [mainImg, setmainImg] = useState([[{}]]);
     const [isModalVisible, setModalVisible] = useState(false);
-    const [number, setNumber] = useState(rand(1,100));
-
-    const [change, onChange]=useState(false);
 
     const [loading, setLoading] = useState(true);
-    const [data,setData]=useState();
+    const [data,setData]=useState([]);
 
-    const [isLiked, setIsLiked] = useState(false);
-    const [likeCount, setLikeCount] = useState(false);
+    const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
+    const chartHeight = Dimensions.get('window').height;
+    const chartWidth = Dimensions.get('window').width;
 
-/*
-    //스크롤 애니메이션 start
-    const [offset, setOffset] = useState(0);
-    const [scrollUp, setScrollUp] = useState(true);
+    const [isSelect, setSelect] = useState([false, false, false]);
+    const [activeSection, setActiveSection] = useState([]);
+    const [number, setNumber] = useState(rand(1,100));
 
-    const onScroll = (event) => {
-        const currentOffset = event.nativeEvent.contentOffset.y;
-        setScrollUp(offset >= currentOffset);
-        setOffset(currentOffset);
-    };
+    const getApi=async ()=>{
+        try{
+            setLoading(true);
+            const response= await axios.get(
+                `http://3.39.190.23:8080/api/feeds`
+            )
+            setData(response.data.data)
+            console.log(data)
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    }
 
-    const animationRef = useRef(new Animated.Value(0)).current;
-    const translateY = animationRef.interpolate({
-        inputRange: [0, 1],
-        outputRange: [0, -10],
-    })
-
-    useEffect(() => {
-        Animated.timing(animationRef, {
-            toValue: scrollUp ? 0 : 1,
-            duration: 300,
-            useNativeDriver: true,
-        }).start();
-    }, [scrollUp]);
-    // 스크롤 애니메이션 end
-*/
+    useEffect(()=>{
+        getApi();
+    },[]);
 
     //heart선택
     const [heartSelected, setHeartSelected] = useState<boolean>(false);
@@ -355,54 +409,91 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
             ? 'https://apps.apple.com/us/app/%EB%B3%B4%EB%8B%A5-%EB%82%B4-%EB%B3%B4%ED%97%98%EC%A0%90%EC%88%98-%EC%A7%84%EB%8B%A8-%EC%83%88%EB%8A%94-%EB%B3%B4%ED%97%98%EB%A3%8C-%ED%99%95%EC%9D%B8/id1447862053'
             : 'https://play.google.com/store/apps/details?id=com.mrp.doctor&hl=ko';
 
+    const goReply = (id: number) => {
+        return (
+            <Pressable
+                onPress={() => {
+                    setSelect([
+                        ...isSelect.slice(0, id),
+                        !isSelect[id],
+                        ...isSelect.slice(id + 1),
+                    ]);
+                }}>
+                <Icon name="md-chatbox-outline" size={25} color='black'
+                      onPress={goToReply}
+                      style={{left: 10, top: 5}}
+                />
+                <BoldText2>{number}</BoldText2>
+            </Pressable>
+        );
+    };
+
     return (
         <Container>
-            {/*<StatusBar style="auto"/>*/}
             <Wrapper>
-            {/*<Animated.ScrollView onScroll={onScroll} scrollEventThrottle={1} style={{flex: 1, transform: [{translateY:translateY}]}}>*/}
                 <MainLogo>
                     {/*<Image style={styles.logo} source={logo}/>*/}
                     <Text style={{
                         color:'black',
-                        fontSize: 40,
+                        fontSize: 35,
                         fontWeight: "bold",
                     }}>OnYou</Text>
                 </MainLogo>
                 <FlatList
                     refreshing={refreshing}
                     onRefresh={onRefresh}
-                    data={Home}
                     keyExtractor={(item, index) => index + ""}
-                    renderItem={(item)=>(
+                    data={Home}
+                    renderItem={()=>(
                         <MainArea>
                             <HeaderStyle>
                                 <HeaderText>
-                                    <LogoImage source={{uri: 'https://i.pinimg.com/564x/79/3b/74/793b74d8d9852e6ac2adeca960debe5d.jpg'}}
-                                        style={{left: 20}}
-                                    />
-                                    <UserId onPress={goToProfile}><Text>Gyubin</Text></UserId>
+                                    <LogoImage source={{uri: 'https://i.pinimg.com/564x/9e/d8/4c/9ed84cf3fc04d0011ec4f75c0692c83e.jpg'}}/>
                                     <View>
+                                        <UserId>이진규
+                                            {/*<FlatList
+                                            refreshing={refreshing}
+                                            onRefresh={onRefresh}
+                                            data={data}
+                                            keyExtractor={(item, index) => index + ""}
+                                            renderItem={({ item }) => (
+                                                <>
+                                                    <PeedId><Text>{item.userName}</Text></PeedId>
+
+                                                </>
+                                            )}
+                                        />*/}
+                                        </UserId>
+                                        <CtrgArea>
+                                            <CtgrText>온유프로젝트</CtgrText>
+                                        </CtrgArea>
+                                    </View>
+                                    <ModalArea>
                                         {/*<Button title="Show modal" onPress={toggleModal} />*/}
                                         <TouchableOpacity onPress={toggleModal}>
-                                            <Icon name="ellipsis-horizontal" size={30} style={{
-                                                marginLeft: 200,
+                                            <Icon name="ellipsis-vertical" size={30} style={{
+                                                marginLeft: 350,
                                                 color: 'black',
-                                                top: 5
+                                                top: -20
                                             }}/>
                                         </TouchableOpacity>
-                                        <Modal isVisible={isModalVisible} backdropOpacity={0}
-                                               deviceWidth={3000} swipeDirection={['up', 'left', 'right', 'down']}
-                                               onBackdropPress={()=>toggleModal()}
-                                               style={{backgroundColor: 'white', opacity: 0.8, }}
-                                               onSwipeComplete={closeModal}
-                                        >
-                                            <View>
-                                                <Button title="수정" onPress={goToModifiy} />
-                                                <Button title="삭제" onPress={deleteCheck} />
-                                                <Button title="신고" onPress={goToAccusation} />
-                                            </View>
-                                        </Modal>
-                                    </View>
+                                        <View>
+                                            <Modal
+                                                animationType="slide"
+                                                transparent={true}
+                                                visible={isModalVisible}
+                                            >
+                                                <CenteredView onTouchEnd={closeModal}>
+                                                    <ModalView>
+                                                        <ModalText onPress={goToModifiy}>수정</ModalText>
+                                                        <ModalText onPress={deleteCheck}>삭제</ModalText>
+                                                        <ModalText onPress={goToAccusation}>신고</ModalText>
+                                                        <ModalText onPress={closeModal}>Close</ModalText>
+                                                    </ModalView>
+                                                </CenteredView>
+                                            </Modal>
+                                        </View>
+                                    </ModalArea>
                                 </HeaderText>
                                 <>
                                     <Swiper
@@ -412,6 +503,8 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
                                         loop={false}
                                         containerStyle={{
                                             width: "100%",
+                                            top: -10,
+                                            borderRadius: 20
                                         }}
                                     >
                                         {mainImg.map((bundle, index) => {
@@ -420,22 +513,16 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
                                                     {bundle.map((item, index) => {
                                                         return (
                                                             <ImgItem key={index}>
-                                                                <ImgSource
-                                                                    source={{
-                                                                        uri: 'https://i.pinimg.com/564x/96/c8/3f/96c83fbf9b5987f24b96d529e9990b19.jpg',
-                                                                    }}
+                                                                <SliderBox  images={[
+                                                                    "https://i.pinimg.com/736x/69/01/fa/6901fa625a250d1a0bf42dd97b941d86.jpg",
+                                                                    "https://i.pinimg.com/564x/e8/7f/50/e87f50bb77134487ce107966f7fc26a9.jpg",
+                                                                    "https://i.pinimg.com/564x/23/58/ec/2358ec9140ebe494df99beedf70c6c33.jpg",
+                                                                    "https://i.pinimg.com/564x/0f/6a/13/0f6a13baac82b80f5b1a1d4d9e20e479.jpg",
+                                                                    "https://i.pinimg.com/originals/69/96/53/69965364cb740c83facb682de198f303.gif"
+                                                                ]}
+                                                                            sliderBoxHeight={350}
+                                                                            sliderBoxWidth={390}
                                                                 />
-                                                                {/*<ImageModal
-                                                                    resizeMode="contain"
-                                                                    imageBackgroundColor="#000000"
-                                                                    style={{
-                                                                        width: 250,
-                                                                        height: 250,
-                                                                    }}
-                                                                    source={{
-                                                                        uri: 'https://i.pinimg.com/564x/96/c8/3f/96c83fbf9b5987f24b96d529e9990b19.jpg',
-                                                                    }}
-                                                                />*/}
                                                             </ImgItem>
                                                         );
                                                     })}
@@ -445,32 +532,62 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
                                     </Swiper>
                                 </>
                             </HeaderStyle>
-                            <OptionArea>
-                                <TouchableOpacity onPress={() => setHeartSelected(!heartSelected)}>
-                                    {heartSelected ? (
-                                        <Ionicons name="md-heart" size={30} color="red" style={{left: 10}}/>
-                                    ) : (
-                                        <Ionicons name="md-heart-outline" size={30} color="red" style={{left: 10}}/>
-                                    )}
-                                </TouchableOpacity>
-                                <Text style={{left: 10}}>{number}</Text>
-                                <TouchableOpacity onPress={goToReply}>
-                                    <Icon name="md-chatbox-outline" size={30} style={{
-                                        marginLeft: 20,
-                                        color: 'black',
-                                    }}/>
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={()=>onShare()}>
-                                    <Icon name="md-share" size={30} style={{
-                                        marginLeft: 20,
-                                        color: 'black',
-                                    }}/>
-                                </TouchableOpacity>
-                            </OptionArea>
-
+                            <TextArea>
+                                <LikeMent>
+                                    <LikeArea>
+                                        <TouchableOpacity onPress={() => setHeartSelected(!heartSelected)}>
+                                            {heartSelected ? (
+                                                <Ionicons name="md-heart" size={24} color="red" />
+                                            ) : (
+                                                <Ionicons name="md-heart-outline" size={24} color="red" />
+                                            )}
+                                        </TouchableOpacity>
+                                        <BoldText2>{rand(1,100)}</BoldText2>
+                                    </LikeArea>
+                                    <ReplyArea>
+                                        <TouchableOpacity onPress={goToReply}>
+                                            <Icon name="md-chatbox-outline" size={25} color='black'
+                                                  style={{ top: 2, left:5}}
+                                            />
+                                        </TouchableOpacity>
+                                        <Text style={{left: 5, fontWeight: 'normal', top: 5}}>{rand(1,100)}</Text>
+                                    </ReplyArea>
+                                    <TouchableOpacity onPress={()=>onShare()}>
+                                        <Icon name="md-share" size={30} style={{
+                                            marginLeft: 2,
+                                            color: 'black',
+                                        }}/>
+                                    </TouchableOpacity>
+                                    <DataArea>
+                                        <Text style={{color: 'grey'}}>
+                                            2022년 6월 15일
+                                        </Text>
+                                    </DataArea>
+                                </LikeMent>
+                            </TextArea>
                             <ContentMent>
-                                <MentId onPress={goToProfile}><Text>11Gyubin</Text></MentId>
-                                <Ment>123 </Ment>
+                                {/*<View style={{ flex: 1, padding: 10, width: 2000 }}>
+                                    {loading ? <ActivityIndicator/> : (
+                                        <ScrollView>
+                                            <FlatList
+                                                refreshing={refreshing}
+                                                onRefresh={onRefresh}
+                                                data={data}
+                                                keyExtractor={(item, index) => index + ""}
+                                                renderItem={({ item }) => (
+                                                    <View style={{flexDirection: 'row'}}>
+                                                        <MentId>{item.userName}</MentId>
+                                                        <Ment numberOfLines={3} ellipsizeMode={"tail"}>{item.content}</Ment>
+
+                                                    </View>
+                                                )}
+                                            />
+                                        </ScrollView>
+                                    )}
+                                </View>*/}
+                                <MentId>유주은</MentId>
+                                <Ment> 디자인 이쁘다</Ment>
+                                <HashTag>#잘 뽑혔구먼</HashTag>
                             </ContentMent>
                         </MainArea>
                     )}
@@ -480,7 +597,6 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
                               style={{}}
                     />
                 </FloatingButton>
-            {/*</Animated.ScrollView >*/}
             </Wrapper>
         </Container>
     )
