@@ -1,5 +1,15 @@
 import React, {useState} from 'react';
-import {StyleSheet, View, Text, Image,FlatList ,SafeAreaView, TouchableOpacity} from 'react-native';
+import {
+    StyleSheet,
+    View,
+    Text,
+    Image,
+    FlatList,
+    SafeAreaView,
+    TouchableOpacity,
+    TextInput,
+    Pressable
+} from 'react-native';
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import styled from "styled-components/native";
@@ -7,41 +17,26 @@ import styled from "styled-components/native";
 import SearchHeader from "./SearchPage/SearchHeader";
 import IntroduceGroup from '../screens/SearchPage/IntroduceGroup'
 import Peed from '../screens/SearchPage/Peed'
+import {SearchBar} from "react-native-screens";
 
 const NativeStack = createNativeStackNavigator();
 const TopTab = createMaterialTopTabNavigator();
-
+import Icon from 'react-native-vector-icons/Ionicons'
 const Wrapper = styled.View`
   flex: 1;
+  top: 2%;
 `;
-
-
-const SearchGroup=styled.View`
-  display: flex;
+const SearchArea=styled.View`
+  height: 40px;
+  margin: 15px 5px 5px 10px;
   flex-direction: row;
-  text-align: center;
-  justify-content: center;
-  margin: 1px;
+  background-color: lightgrey;
+  border-radius: 10px;
 `
-
-const GroupText=styled.Text`
-  display: flex;
-  text-align: center;
-  justify-content: center;
-  top: 250px;
-  color: red;
-  font-size: 20px;
+const SearchText=styled.TextInput`
+  font-size: 15px;
+  left: 5px;
 `
-
-const GroupImage=styled.Image`
-  width: 130px;
-  height: 110px;
-  margin: 1px;
-`
-
-const SearchArea=()=>(
-    <SearchHeader/>
-)
 
 const ClubHome = () => (
     <IntroduceGroup/>
@@ -51,15 +46,25 @@ const Feed = () => (
     <Peed/>
 );
 
+const recentSearch=()=>{
+
+}
+
 const ClubHomeTopTabs=()=>{
     return (
+        <Wrapper>
+            <SearchArea>
+                <Icon name="md-search" size={20} style={{top:10, left:5}}/>
+                <SearchText placeholder="검색"/>
+
+            </SearchArea>
         <TopTab.Navigator
             initialRouteName="ClubHome"
             screenOptions={{ swipeEnabled: true
             }}
         >
             <TopTab.Screen
-                options={{ title: "최근검색어" }}
+                options={{ title: "모임" }}
                 name="ClubHome"
                 component={ClubHome}
             />
@@ -67,7 +72,12 @@ const ClubHomeTopTabs=()=>{
                 options={{ title: "피드" }}
                 name="Feed"
                 component={Feed} />
+            <TopTab.Screen
+                options={{ title: "태그" }}
+                name="Tag"
+                component={Feed} />
         </TopTab.Navigator>
+            </Wrapper>
     );
 }
 

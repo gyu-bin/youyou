@@ -101,7 +101,8 @@ export default function Peed(){
                         refreshing={refreshing}
                         onRefresh={onRefresh}
                         data={Search}
-                        renderItem={()=>(
+                        keyExtractor={(item, index) => index + ""}
+                        renderItem={({item})=>(
                             <ImageScroll>
                                 <ImageVIew>
                                     <Img

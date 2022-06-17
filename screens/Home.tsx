@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
     ActivityIndicator,
     FlatList,
@@ -8,7 +8,7 @@ import {
     TouchableOpacity,
     Button,
     Dimensions,
-    TouchableWithoutFeedback, Alert
+    TouchableWithoutFeedback, Alert, Animated, Share, Platform
 } from 'react-native';
 import styled from "styled-components/native";
 import Swiper from "react-native-swiper";
@@ -28,9 +28,6 @@ const Loader = styled.View`
   justify-content: center;
   align-items: center;
 `;
-const Scroll = styled.ScrollView`
-  background-color: black;
-`
 
 const MainArea=styled.View`
   justify-content: space-between;
@@ -41,6 +38,8 @@ const MainLogo=styled.Text`
   justify-content: space-between;
   background-color: white;
   display: flex;
+  height: 55px;
+  left: 10px;
 `
 const PlusFeed=styled.Button`
   color: white;
@@ -50,18 +49,19 @@ const PlusFeed=styled.Button`
 const HeaderStyle=styled.View`
   background-color: white;
   height: 400px;
-  margin-top: 10px;
 `
 const HeaderText=styled.Text`
   flex-direction: row;
-  left: 5px;
+  left: 10px;
+  height: 56px;
 `
 
 const UserId=styled.TouchableOpacity`
   color: black;
-  height: 25px;
   font-weight: bold;
   font-size: 15px;
+  margin-left: 20px;
+  top: 10px;
 `
 
 //ModalStyle
@@ -84,8 +84,8 @@ const TextArea=styled.View`
 const LogoImage=styled.Image`
   width: 40px;
   height: 40px;
-  border-radius: 100px;
-  z-index: 1;
+  right: 20px;
+  border-radius: 20px;
 `
 
 const LikeImg=styled.Image`
@@ -125,6 +125,12 @@ const Wrapper = styled.View`
   flex: 1;
   background-color: white;
 `;
+
+const OptionArea = styled.View`
+  flex-direction: row;
+  position: relative;
+`
+
 const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get("window");
 
 //Img Slider
@@ -143,6 +149,7 @@ const ImgItem = styled.View`
 const ImgSource = styled.Image`
   width: 390px;
   height: 100%;
+  border-radius: 20px;
 `;
 
 const ModalBtn=styled.View`
@@ -177,9 +184,45 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
     const [Home, setHome] = useState([{}]);
     const [mainImg, setmainImg] = useState([[{}]]);
     const [isModalVisible, setModalVisible] = useState(false);
+    const [number, setNumber] = useState(rand(1,100));
+
+    const [change, onChange]=useState(false);
 
     const [loading, setLoading] = useState(true);
     const [data,setData]=useState();
+
+    const [isLiked, setIsLiked] = useState(false);
+    const [likeCount, setLikeCount] = useState(false);
+
+/*
+    //스크롤 애니메이션 start
+    const [offset, setOffset] = useState(0);
+    const [scrollUp, setScrollUp] = useState(true);
+
+    const onScroll = (event) => {
+        const currentOffset = event.nativeEvent.contentOffset.y;
+        setScrollUp(offset >= currentOffset);
+        setOffset(currentOffset);
+    };
+
+    const animationRef = useRef(new Animated.Value(0)).current;
+    const translateY = animationRef.interpolate({
+        inputRange: [0, 1],
+        outputRange: [0, -10],
+    })
+
+    useEffect(() => {
+        Animated.timing(animationRef, {
+            toValue: scrollUp ? 0 : 1,
+            duration: 300,
+            useNativeDriver: true,
+        }).start();
+    }, [scrollUp]);
+    // 스크롤 애니메이션 end
+*/
+
+    //heart선택
+    const [heartSelected, setHeartSelected] = useState<boolean>(false);
 
     const toggleModal = () => {
         setModalVisible(!isModalVisible);
@@ -194,6 +237,12 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
     const goToContent = () => {
         navigate("HomeStack",{
             screen:"ImageSelecter"
+        })
+    }
+
+    const goToReply = () => {
+        navigate("HomeStack",{
+            screen:"ReplyPage"
         })
     }
 
@@ -239,18 +288,15 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
         setModalVisible(!isModalVisible);
     }
 
-
-
-
     const getHome = () => {
         const result = [];
-        for (let i = 0; i < 10; ++i) {
+        for (let i = 0; i < 5; ++i) {
             result.push({
                 id: i,
                 img:
                     "https://i.pinimg.com/564x/96/a1/11/96a111a649dd6d19fbde7bcbbb692216.jpg",
                 name: "문규빈",
-                content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
                 memberNum: Math.ceil(Math.random() * 10),
             });
         }
@@ -273,10 +319,47 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
         setRefreshing(false);
     };
 
+
+    const onIncrease = () => {
+        setNumber(number + 1);
+    }
+
+    const onDecrease = () => {
+        setNumber(number - 1);
+    }
+
+    const onShare = async () => {
+        try {
+            const result = await Share.share(
+                {
+                    message: '현재 이 글의 링크가 복사됨.',
+                }
+            );
+
+            if (result.action === Share.sharedAction) {
+                if (result.activityType) {
+                    console.log('activityType!');
+                } else {
+                    console.log('Share!');
+                }
+            } else if (result.action === Share.dismissedAction) {
+                console.log('dismissed');
+            }
+        } catch (error) {
+            Alert.alert(error.message);
+        }
+    };
+
+    const link =
+        Platform.OS === 'ios'
+            ? 'https://apps.apple.com/us/app/%EB%B3%B4%EB%8B%A5-%EB%82%B4-%EB%B3%B4%ED%97%98%EC%A0%90%EC%88%98-%EC%A7%84%EB%8B%A8-%EC%83%88%EB%8A%94-%EB%B3%B4%ED%97%98%EB%A3%8C-%ED%99%95%EC%9D%B8/id1447862053'
+            : 'https://play.google.com/store/apps/details?id=com.mrp.doctor&hl=ko';
+
     return (
         <Container>
-            <StatusBar style="auto"/>
+            {/*<StatusBar style="auto"/>*/}
             <Wrapper>
+            {/*<Animated.ScrollView onScroll={onScroll} scrollEventThrottle={1} style={{flex: 1, transform: [{translateY:translateY}]}}>*/}
                 <MainLogo>
                     {/*<Image style={styles.logo} source={logo}/>*/}
                     <Text style={{
@@ -289,17 +372,20 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
                     refreshing={refreshing}
                     onRefresh={onRefresh}
                     data={Home}
-                    renderItem={()=>(
+                    keyExtractor={(item, index) => index + ""}
+                    renderItem={(item)=>(
                         <MainArea>
                             <HeaderStyle>
                                 <HeaderText>
-                                    <LogoImage source={{uri: 'https://i.pinimg.com/564x/79/3b/74/793b74d8d9852e6ac2adeca960debe5d.jpg'}}/>
+                                    <LogoImage source={{uri: 'https://i.pinimg.com/564x/79/3b/74/793b74d8d9852e6ac2adeca960debe5d.jpg'}}
+                                        style={{left: 20}}
+                                    />
                                     <UserId onPress={goToProfile}><Text>Gyubin</Text></UserId>
                                     <View>
                                         {/*<Button title="Show modal" onPress={toggleModal} />*/}
                                         <TouchableOpacity onPress={toggleModal}>
                                             <Icon name="ellipsis-horizontal" size={30} style={{
-                                                marginLeft: 230,
+                                                marginLeft: 200,
                                                 color: 'black',
                                                 top: 5
                                             }}/>
@@ -359,31 +445,44 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
                                     </Swiper>
                                 </>
                             </HeaderStyle>
-                            <TextArea>
-                            </TextArea>
-                            <TextArea>
-                                <LikeImg source={{uri: 'https://i.pinimg.com/564x/96/a1/11/96a111a649dd6d19fbde7bcbbb692216.jpg'}}/>
-                                <LikeImg source={{uri: 'https://i.pinimg.com/564x/23/58/ec/2358ec9140ebe494df99beedf70c6c33.jpg'}}/>
-                                <LikeImg source={{uri: 'https://i.pinimg.com/564x/96/c8/3f/96c83fbf9b5987f24b96d529e9990b19.jpg'}}/>
-                                <LikeMent>
-                                    <BoldText1 onPress={goToProfile}><Text>Gyubin</Text></BoldText1>님 외 <BoldText2>{rand(1,10000)}</BoldText2>명이 좋아합니다
-                                </LikeMent>
-                            </TextArea>
+                            <OptionArea>
+                                <TouchableOpacity onPress={() => setHeartSelected(!heartSelected)}>
+                                    {heartSelected ? (
+                                        <Ionicons name="md-heart" size={30} color="red" style={{left: 10}}/>
+                                    ) : (
+                                        <Ionicons name="md-heart-outline" size={30} color="red" style={{left: 10}}/>
+                                    )}
+                                </TouchableOpacity>
+                                <Text style={{left: 10}}>{number}</Text>
+                                <TouchableOpacity onPress={goToReply}>
+                                    <Icon name="md-chatbox-outline" size={30} style={{
+                                        marginLeft: 20,
+                                        color: 'black',
+                                    }}/>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={()=>onShare()}>
+                                    <Icon name="md-share" size={30} style={{
+                                        marginLeft: 20,
+                                        color: 'black',
+                                    }}/>
+                                </TouchableOpacity>
+                            </OptionArea>
+
                             <ContentMent>
-                                <MentId onPress={goToProfile}><Text>Gyubin</Text></MentId>
-                                <Ment>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. </Ment>
+                                <MentId onPress={goToProfile}><Text>11Gyubin</Text></MentId>
+                                <Ment>123 </Ment>
                             </ContentMent>
                         </MainArea>
                     )}
                 />
                 <FloatingButton onPress={goToContent}>
                     <Ionicons name="ios-add-sharp" size={28} color="black"
-                              style={{left: 1}}
+                              style={{}}
                     />
                 </FloatingButton>
+            {/*</Animated.ScrollView >*/}
             </Wrapper>
         </Container>
-
     )
 }
 export default Home;

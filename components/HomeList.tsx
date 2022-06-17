@@ -106,7 +106,6 @@ export default function Home(){
 
     return(
         <Container>
-            <StatusBar/>
             <Scroll>
                 <MainArea>
                     <MainLogo>

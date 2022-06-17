@@ -6,6 +6,7 @@ import CreateHomePeed from '../screens/HomeRelevant/CreateHomePeed'
 import Accusation from '../screens/HomeRelevant/Accusation'
 import ModifiyPeed from "../screens/HomeRelevant/ModifiyPeed";
 import ImageSelecter from '../screens/HomeRelevant/ImageSelecter'
+import ReplyPage from '../screens/HomeRelevant/ReplyPage'
 import {TouchableOpacity} from "react-native";
 import {Ionicons} from "@expo/vector-icons";
 
@@ -66,6 +67,20 @@ const HomeStack = ({ navigation: { navigate } }) => {
                 component={ModifiyPeed}
                 options={{
                     title: "수정",
+                    headerLeft: () => (
+                        <TouchableOpacity
+                            onPress={() => navigate("Tabs", { screen: "Home" })}
+                        >
+                            <Ionicons name="chevron-back" size={20} color="black" />
+                        </TouchableOpacity>
+                    ),
+                }}
+            />
+            <NativeStack.Screen
+                name="ReplyPage"
+                component={ReplyPage}
+                options={{
+                    title: "댓글",
                     headerLeft: () => (
                         <TouchableOpacity
                             onPress={() => navigate("Tabs", { screen: "Home" })}

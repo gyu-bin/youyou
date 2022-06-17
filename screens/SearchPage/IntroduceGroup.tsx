@@ -62,16 +62,16 @@ export default function IntroduceGroup(){
     const Stack = createNativeStackNavigator();
     const onChangeSearch = query => setSearchQuery(query);
 
-    const getSearch = () => {
+/*    const getSearch = () => {
         const result = [];
         for (let i = 0; i < 10; ++i) {
             result.push({
-                /* id: i,
+                /!* id: i,
                  img:
                      "https://i.pinimg.com/564x/96/a1/11/96a111a649dd6d19fbde7bcbbb692216.jpg",
                  name: "문규빈",
                  content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-                 memberNum: Math.ceil(Math.random() * 10),*/
+                 memberNum: Math.ceil(Math.random() * 10),*!/
             });
         }
 
@@ -90,13 +90,12 @@ export default function IntroduceGroup(){
         setRefreshing(true);
         await getData();
         setRefreshing(false);
-    };
+    };*/
 
     return (
         <Container>
             <StatusBar style="auto"/>
-            <Text>최근검색어</Text>
-            <Text>1. 퇴사를 2.하자 3.열심히</Text>
+            <Text>모임들</Text>
         </Container>
     )
 }
