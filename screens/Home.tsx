@@ -100,7 +100,8 @@ const LogoImage=styled.Image`
   height: 40px;
   right: 20px;
   border-radius: 20px;
-  border: lightgray 2px solid;
+  border: lightgray;
+  box-shadow: 1px 1px 3px gray;
 `
 
 const LikeImg=styled.Image`
