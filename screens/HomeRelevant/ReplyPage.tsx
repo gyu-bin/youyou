@@ -15,7 +15,6 @@ import styled from "styled-components/native";
 import {Ionicons} from "@expo/vector-icons";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import axios from 'axios';
-import { Modalize } from 'react-native-modalize';
 
 const Container = styled.SafeAreaView`
   flex: 1;
