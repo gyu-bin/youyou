@@ -7,8 +7,19 @@ import {
     Text,
     TouchableOpacity,
     Button,
-    Dimensions, Modal,
-    TouchableWithoutFeedback, Alert, Slider, Image, ScrollView, useWindowDimensions, Pressable, Share, Platform
+    Dimensions,
+    Modal,
+    TouchableWithoutFeedback,
+    Alert,
+    Slider,
+    Image,
+    ScrollView,
+    useWindowDimensions,
+    Pressable,
+    Share,
+    Platform,
+    StyleSheet,
+    Animated, Easing, ImageBackground
 } from 'react-native';
 import styled from "styled-components/native";
 import Swiper from "react-native-swiper";
@@ -49,12 +60,24 @@ const PlusFeed=styled.Button`
 const HeaderStyle=styled.View`
   background-color: white;
   height: 400px;
+  top: 10px;
 `
-const HeaderText=styled.Text`
+const HeaderText=styled.View`
   flex-direction: row;
   left: 10px;
-  top: 2%;
 `
+
+const MainText=styled.View`
+  flex-direction: row;
+  height: 60px;
+`
+
+const LogoImage=styled.Image`
+  width: 45px;
+  height: 45px;
+  border-radius: 100px;
+`
+
 const UserId=styled.Text`
   color: black;
   font-weight: bold;
@@ -95,27 +118,13 @@ const TextArea=styled.View`
   top: -5px;
   width: 100%;
 `
-const LogoImage=styled.Image`
-  width: 40px;
-  height: 40px;
-  right: 20px;
-  border-radius: 20px;
-  border: lightgray;
-  box-shadow: 1px 1px 3px gray;
-`
 
-const LikeImg=styled.Image`
-  width: 20px;
-  height: 20px;
-  border-radius: 100px;
-  z-index: 1;
-`
 
 const LikeMent=styled.Text`
   flex-direction: row;
   color: black;
   margin-left: 10px;
-  background-color: beige;
+  width: 100%;
 `
 
 const LikeArea=styled.View`
@@ -148,8 +157,7 @@ const MentId=styled.Text`
 
 const Ment = styled.Text`
   color: black;
-  margin-left: 10px;
-  width: 200px;
+  margin-left: 2%;
 `
 const HashTag=styled.Text`
   color: rgb(99,171,255);
@@ -158,6 +166,7 @@ const HashTag=styled.Text`
 const Wrapper = styled.View`
   flex: 1;
   background-color: white;
+  top: 10px;
 `;
 
 const OptionArea = styled.View`
@@ -167,7 +176,6 @@ const OptionArea = styled.View`
 //ModalStyle
 
 const ModalArea = styled.View`
-
 `
 
 const CenteredView=styled.View`
@@ -206,10 +214,6 @@ const ImgView = styled.View`
 const ImgItem = styled.View`
   flex-direction: column;
   align-items: center;
-`;
-
-const ImgSource = styled.Image`
-  border-radius: 50px;
 `;
 
 const ModalBtn=styled.View`
@@ -308,11 +312,6 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
         setModalVisible(!isModalVisible);
     }
 
-    const CreateFeed=()=>{
-        navigate("HomeStack",{
-            screen:"CreateHomePeed"
-        })
-    }
 
     const goToAccusation=()=>{
         navigate("HomeStack",{
@@ -420,7 +419,7 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
                         ...isSelect.slice(id + 1),
                     ]);
                 }}>
-                <Icon name="md-chatbox-outline" size={25} color='black'
+                <Icon name="md-chatbox-ellipses" size={25} color='black'
                       onPress={goToReply}
                       style={{left: 10, top: 5}}
                 />
@@ -440,15 +439,11 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
                         fontWeight: "bold",
                     }}>OnYou</Text>
                 </MainLogo>
-                <FlatList
-                    refreshing={refreshing}
-                    onRefresh={onRefresh}
-                    keyExtractor={(item, index) => index + ""}
-                    data={Home}
-                    renderItem={()=>(
-                        <MainArea>
-                            <HeaderStyle>
-                                <HeaderText>
+                <FlatList refreshing={refreshing} onRefresh={onRefresh} keyExtractor={(item, index) => index + ""} data={Home} renderItem={()=>(
+                    <MainArea>
+                        <HeaderStyle>
+                            <HeaderText>
+                                <MainText>
                                     <LogoImage source={{uri: 'https://i.pinimg.com/564x/9e/d8/4c/9ed84cf3fc04d0011ec4f75c0692c83e.jpg'}}/>
                                     <View>
                                         <UserId>이진규
@@ -469,105 +464,107 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
                                             <CtgrText>온유프로젝트</CtgrText>
                                         </CtrgArea>
                                     </View>
-                                    <ModalArea>
-                                        {/*<Button title="Show modal" onPress={toggleModal} />*/}
-                                        <TouchableOpacity onPress={toggleModal}>
-                                            <Icon name="ellipsis-vertical" size={30} style={{
-                                                marginLeft: 350,
-                                                color: 'black',
-                                                top: -20
-                                            }}/>
-                                        </TouchableOpacity>
-                                        <View>
-                                            <Modal
-                                                animationType="slide"
-                                                transparent={true}
-                                                visible={isModalVisible}
-                                            >
-                                                <CenteredView onTouchEnd={closeModal}>
-                                                    <ModalView>
-                                                        <ModalText onPress={goToModifiy}>수정</ModalText>
-                                                        <ModalText onPress={deleteCheck}>삭제</ModalText>
-                                                        <ModalText onPress={goToAccusation}>신고</ModalText>
-                                                        <ModalText onPress={closeModal}>Close</ModalText>
-                                                    </ModalView>
-                                                </CenteredView>
-                                            </Modal>
-                                        </View>
-                                    </ModalArea>
-                                </HeaderText>
-                                <>
-                                    <Swiper
-                                        horizontal
-                                        showsButtons
-                                        showsPagination
-                                        loop={false}
-                                        containerStyle={{
-                                            width: "100%",
-                                            top: -10,
-                                            borderRadius: 20
-                                        }}
-                                    >
-                                        {mainImg.map((bundle, index) => {
-                                            return (
-                                                <ImgView key={index}>
-                                                    {bundle.map((item, index) => {
-                                                        return (
-                                                            <ImgItem key={index}>
-                                                                <SliderBox  images={[
-                                                                    "https://i.pinimg.com/736x/69/01/fa/6901fa625a250d1a0bf42dd97b941d86.jpg",
-                                                                    "https://i.pinimg.com/564x/e8/7f/50/e87f50bb77134487ce107966f7fc26a9.jpg",
-                                                                    "https://i.pinimg.com/564x/23/58/ec/2358ec9140ebe494df99beedf70c6c33.jpg",
-                                                                    "https://i.pinimg.com/564x/0f/6a/13/0f6a13baac82b80f5b1a1d4d9e20e479.jpg",
-                                                                    "https://i.pinimg.com/originals/69/96/53/69965364cb740c83facb682de198f303.gif"
-                                                                ]}
-                                                                            sliderBoxHeight={350}
-                                                                            sliderBoxWidth={390}
-                                                                />
-                                                            </ImgItem>
-                                                        );
-                                                    })}
-                                                </ImgView>
-                                            );
-                                        })}
-                                    </Swiper>
-                                </>
-                            </HeaderStyle>
-                            <TextArea>
-                                <LikeMent>
-                                    <LikeArea>
-                                        <TouchableOpacity onPress={() => setHeartSelected(!heartSelected)}>
-                                            {heartSelected ? (
-                                                <Ionicons name="md-heart" size={24} color="red" />
-                                            ) : (
-                                                <Ionicons name="md-heart-outline" size={24} color="red" />
-                                            )}
-                                        </TouchableOpacity>
-                                        <BoldText2>{rand(1,100)}</BoldText2>
-                                    </LikeArea>
-                                    <ReplyArea>
-                                        <TouchableOpacity onPress={goToReply}>
-                                            <Icon name="md-chatbox-outline" size={25} color='black'
-                                                  style={{ top: 2, left:5}}
-                                            />
-                                        </TouchableOpacity>
-                                        <Text style={{left: 5, fontWeight: 'normal', top: 5}}>{rand(1,100)}</Text>
-                                    </ReplyArea>
-                                    <TouchableOpacity onPress={()=>onShare()}>
-                                        <Icon name="md-share" size={30} style={{
-                                            marginLeft: 2,
+                                </MainText>
+                                <ModalArea>
+                                    <TouchableOpacity onPress={toggleModal} style={{top: 10, left: 220 }}>
+                                        <Icon name="ellipsis-vertical" size={30} style={{
                                             color: 'black',
                                         }}/>
+                                        {/*<View onPress={toggleModal}>
+
+                                            </View>*/}
                                     </TouchableOpacity>
-                                    <DataArea>
-                                        <Text style={{color: 'grey'}}>
-                                            2022년 6월 15일
-                                        </Text>
-                                    </DataArea>
-                                </LikeMent>
-                            </TextArea>
-                            <ContentMent>
-                                {/*<View style={{ flex: 1, padding: 10, width: 2000 }}>
+                                    <View>
+                                        <Modal
+                                            animationType="slide"
+                                            transparent={true}
+                                            visible={isModalVisible}
+                                        >
+                                            <CenteredView onTouchEnd={closeModal}>
+                                                <ModalView>
+                                                    <ModalText onPress={goToModifiy}>수정</ModalText>
+                                                    <ModalText onPress={deleteCheck}>삭제</ModalText>
+                                                    <ModalText onPress={goToAccusation}>신고</ModalText>
+                                                    <ModalText onPress={closeModal}>Close</ModalText>
+                                                </ModalView>
+                                            </CenteredView>
+                                        </Modal>
+                                    </View>
+                                </ModalArea>
+                            </HeaderText>
+                            <>
+                                <Swiper
+                                    horizontal
+                                    containerStyle={{
+                                        width: "100%",
+                                        top: -5,
+
+                                    }}
+                                >
+                                    {mainImg.map((bundle, index) => {
+                                        return (
+                                            <ImgView key={index}>
+                                                {bundle.map((item, index) => {
+                                                    return (
+                                                        <ImgItem key={index}>
+                                                            <SliderBox  images={[
+                                                                "https://i.pinimg.com/736x/69/01/fa/6901fa625a250d1a0bf42dd97b941d86.jpg",
+                                                                "https://i.pinimg.com/564x/e8/7f/50/e87f50bb77134487ce107966f7fc26a9.jpg",
+                                                                "https://i.pinimg.com/564x/23/58/ec/2358ec9140ebe494df99beedf70c6c33.jpg",
+                                                                "https://i.pinimg.com/564x/0f/6a/13/0f6a13baac82b80f5b1a1d4d9e20e479.jpg",
+                                                                "https://i.pinimg.com/originals/69/96/53/69965364cb740c83facb682de198f303.gif"
+                                                            ]}
+                                                                        sliderBoxHeight={350}
+                                                                        sliderBoxWidth={390}
+                                                            />
+                                                        </ImgItem>
+                                                    );
+                                                })}
+                                            </ImgView>
+                                        );
+                                    })}
+                                </Swiper>
+                            </>
+                        </HeaderStyle>
+                        <TextArea>
+                            <LikeMent>
+                                <LikeArea>
+                                    <TouchableOpacity onPress={() => setHeartSelected(!heartSelected)}>
+                                        {heartSelected ? (
+                                            <TouchableOpacity onPress={()=>onIncrease()}>
+                                                <Ionicons name="md-heart" size={24} color="red" />
+                                            </TouchableOpacity>
+                                        ) : (
+                                            <TouchableOpacity onPress={()=>onDecrease()}>
+                                                <Ionicons name="md-heart-outline" size={24} color="red"/>
+                                            </TouchableOpacity>
+                                        )}
+                                    </TouchableOpacity>
+                                    <BoldText2>{number}</BoldText2>
+                                </LikeArea>
+                                <ReplyArea>
+                                    <TouchableOpacity onPress={goToReply}>
+                                        <Icon name="md-chatbox-ellipses-outline" size={25} color='black'
+                                              style={{ top: 2, left:5}}
+                                        />
+                                    </TouchableOpacity>
+                                    <Text style={{left: 5, fontWeight: 'normal', top: 5}}>{rand(1,100)}</Text>
+                                </ReplyArea>
+                                <TouchableOpacity onPress={()=>onShare()}>
+                                    <Icon name="md-share" size={30} style={{
+                                        marginLeft: 15,
+                                        color: 'black',
+                                    }}/>
+                                </TouchableOpacity>
+                                <DataArea>
+                                    <Text style={{color: 'grey', left: 150}}>
+                                        2022년 6월 15일
+                                    </Text>
+                                </DataArea>
+                            </LikeMent>
+                        </TextArea>
+                        <ContentMent>
+                            {/*<View style={{ flex: 1, padding: 10, width: 2000 }}>
                                     {loading ? <ActivityIndicator/> : (
                                         <ScrollView>
                                             <FlatList
@@ -586,13 +583,12 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
                                         </ScrollView>
                                     )}
                                 </View>*/}
-                                <MentId>유주은</MentId>
-                                <Ment> 디자인 이쁘다</Ment>
-                                <HashTag>#잘 뽑혔구먼</HashTag>
-                            </ContentMent>
-                        </MainArea>
-                    )}
-                />
+                            <MentId>유주은</MentId>
+                            <Ment> 디자인 이쁘다</Ment>
+                            <HashTag>#잘 뽑혔구먼</HashTag>
+                        </ContentMent>
+                    </MainArea>
+                )}></FlatList>
                 <FloatingButton onPress={goToContent}>
                     <Ionicons name="ios-add-sharp" size={28} color="black"
                               style={{}}

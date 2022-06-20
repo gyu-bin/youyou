@@ -1,5 +1,16 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {View, Text, ScrollView, TouchableOpacity, FlatList, Button, TextInput, Alert, Animated} from 'react-native';
+import {
+    View,
+    Text,
+    ScrollView,
+    TouchableOpacity,
+    FlatList,
+    Button,
+    TextInput,
+    Alert,
+    Animated,
+    ActivityIndicator
+} from 'react-native';
 import styled from "styled-components/native";
 import {Ionicons} from "@expo/vector-icons";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
@@ -92,7 +103,6 @@ const CommentMent = styled.View`
 const CommentRemainder = styled.View`
   flex-direction: row;
   justify-content: space-evenly;
-  left: 8%;
 `
 
 const Time = styled.Text`
@@ -123,7 +133,7 @@ const ReplyPage:React.FC<NativeStackScreenProps<any, "ReplyPage">> = ({
     const [mainImg, setmainImg] = useState([[{}]]);
     const [isModalVisible, setModalVisible] = useState(false);
     const [heartSelected, setHeartSelected] = useState<boolean>(false);
-    const [data,setData]=useState();
+    const [data,setData]=useState([]);
     const [number, onChangeNumber] = React.useState(null);
     const [news, setNews] = useState('');
     const [loading, setLoading] = useState(false);
@@ -161,13 +171,13 @@ const ReplyPage:React.FC<NativeStackScreenProps<any, "ReplyPage">> = ({
         setRefreshing(false);
     };
 
-    const getReply=async ()=>{
+    const getReplyApi=async ()=>{
         try{
             setLoading(true);
             const response= await axios.get(
-                `http://3.39.190.23:8080/api/feeds`
+                `http://3.39.190.23:8080/api/feeds/1`
             )
-            setData(response.data.data)
+            setData(response.data.data.comment)
             console.log(data)
         } catch (error) {
             console.error(error);
@@ -177,7 +187,7 @@ const ReplyPage:React.FC<NativeStackScreenProps<any, "ReplyPage">> = ({
     }
 
     useEffect(()=>{
-        getReply();
+        getReplyApi();
     },[]);
 
     const goToHome = () => {
@@ -185,33 +195,6 @@ const ReplyPage:React.FC<NativeStackScreenProps<any, "ReplyPage">> = ({
             screen:"Home"
         })
     }
-    const fetchNews = async () => {
-        try {
-            setLoading(true);
-
-            const response = await axios.get(
-                'http://3.39.190.23:8080/api/feeds'
-            );
-            // 데이터는 response.data.data 안에 들어있다.
-            setNews(response.data);
-        } catch (e) {
-            setError(e);
-        }
-        // loading 끄기
-        setLoading(false);
-    };
-
-// 첫 렌더링 때 fetchNews() 한 번 실행
-    useEffect(() => {
-        fetchNews();
-    }, []);
-
-
-    const modalizeRef = useRef<Modalize>(null);
-
-    const onOpen = () => {
-        modalizeRef.current?.open();
-    };
 
     return(
         <Container>
@@ -228,16 +211,61 @@ const ReplyPage:React.FC<NativeStackScreenProps<any, "ReplyPage">> = ({
                 </ContentArea>
             </TitleView>
                 <UnderBar/>
-            <FlatList
+            <View>
+                {loading ? <ActivityIndicator/> : (
+                    <ScrollView>
+                        <FlatList
+                            refreshing={refreshing}
+                            onRefresh={onRefresh}
+                            data={data}
+                            keyExtractor={(item, index) => index + ""}
+                            renderItem={({ item }) => (
+                                <CommentArea>
+                                    <View>
+                                        <CommentMent>
+                                            <CommentImg source={{uri: 'https://i.pinimg.com/564x/13/05/7c/13057c33d7ad3f50ea99bc44b388ebcb.jpg'}}/>
+                                            <CommentId>{item.userName}</CommentId>
+                                            <Comment>{item.content}</Comment>
+                                        </CommentMent>
+                                        <CommentRemainder>
+                                            <Time>{rand(1,60)}분</Time>
+                                            {/*<Time>{item.created}</Time>*/}
+                                            <Like>좋아요 {rand(1,100)} 개</Like>
+                                            <TouchableOpacity onPress={()=>goToHome(item)}>
+                                                <Text>답글 달기</Text>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity onPress={() => setHeartSelected(!heartSelected)}>
+                                                {heartSelected ? (
+                                                    <Ionicons name="md-heart" size={24} color="red" />
+                                                ) : (
+                                                    <Ionicons name="md-heart-outline" size={24} color="red" />
+                                                )}
+                                            </TouchableOpacity>
+                                        </CommentRemainder>
+                                    </View>
+                                </CommentArea>
+                                                )}
+                                            />
+                    </ScrollView>
+                                    )}
+            </View>
+            {/*<FlatList
                 data={Home}
+                refreshing={refreshing}
+                onRefresh={onRefresh}
                 keyExtractor={(item, index) => index + ""}
                 renderItem={({item})=>(
                     <CommentArea>
                         <View>
                             <CommentMent>
                                 <CommentImg source={{uri: 'https://i.pinimg.com/564x/13/05/7c/13057c33d7ad3f50ea99bc44b388ebcb.jpg'}}/>
-                                <CommentId>Gyubin</CommentId>
+                                <CommentId>{item.userName}</CommentId>
                                 <Comment>123</Comment>
+                                <View style={{flexDirection: 'row'}}>
+                                    <MentId>{item.userName}</MentId>
+                                    <Ment numberOfLines={3} ellipsizeMode={"tail"}>{item.content}</Ment>
+
+                                </View>
                             </CommentMent>
                             <CommentRemainder>
                                 <Time>{rand(1,60)}분</Time>
@@ -256,7 +284,7 @@ const ReplyPage:React.FC<NativeStackScreenProps<any, "ReplyPage">> = ({
                         </View>
                     </CommentArea>
                 )}
-            />
+            />*/}
             <FieldInput
                 clearButtonMode="always"
                 placeholder="댓글"

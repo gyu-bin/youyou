@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
-    Button,
-    Image,
-    View,
-    Platform,
-    Alert,
-    ScrollView,
+    Alert, Image,
+    Keyboard,
+    Pressable,
     Text,
-    Switch,
-    RefreshControl,
-    SafeAreaView, Keyboard, TouchableWithoutFeedback, ActivityIndicator, FlatList, Pressable, TextInput,
+    TextInput,
+    TouchableWithoutFeedback,
+    useWindowDimensions,
+    View,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 
@@ -17,7 +15,6 @@ import styled from "styled-components/native";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import SelectDropdown from "react-native-select-dropdown";
 import axios from "axios";
-import Icon from "react-native-vector-icons/Ionicons";
 
 interface ValueInfo{
     str: string;
@@ -98,9 +95,43 @@ const ButtonText = styled.Text`
   color: white;
 `;
 
+
+const ContentArea=styled.TextInput`
+  width: 100%;
+  height: 20%;
+`
+
+const ImagePickerView = styled.View`
+  width: 100%;
+  align-items: center;
+`;
+
+const ImagePickerButton = styled.TouchableOpacity<{ height: number }>`
+  width: 80%;
+  border-radius: 10px;
+  height: ${(props) => props.height}px;
+  justify-content: center;
+  align-items: center;
+  background-color: #c4c4c4;
+`;
+
+const ImagePickerText = styled.Text`
+  font-size: 21px;
+  font-weight: 600;
+  color: #2995fa;
+`;
+
+const PickedImage = styled.Image<{ height: number }>`
+  width: 100%;
+  height: ${(props) => props.height}px;
+  border-radius: 10px;
+`;
+
+
+
 export default function ImageSelecter({navigation: {navigate}}) {
-    const [image, setImage] = useState(null);
-    let [text, onChangeText]=useState("")
+    const [image, setImage] = useState<string | null>(null);
+    let [text, onChangeText]=useState("사진을 선택하세요")
     const [selectCategory, setCategory] = useState(null);
     const[displayName, setDisplayName]=useState('');
     const [response, setResponse]=useState(null);
@@ -110,6 +141,7 @@ export default function ImageSelecter({navigation: {navigate}}) {
     const [loading, setLoading] = useState(true);
     const [data,setData]=useState([]);
     const [isSelect, setSelect] = useState([false, false, false]);
+    const [imageURI, setImageURI] = useState<string | null>(null);
 
     const getValueInfos = (value: string): ValueInfo[] => {
         if (value.length === 0) {
@@ -117,7 +149,7 @@ export default function ImageSelecter({navigation: {navigate}}) {
         }
         const splitedArr = value.split(" ");
         let idx = 0;
-        const valueInfos: ValueInfo[] = splitedArr.map(str => {
+        return splitedArr.map(str => {
             const idxArr = [idx, idx + str.length - 1];
             idx += str.length + 1;
             return {
@@ -125,13 +157,15 @@ export default function ImageSelecter({navigation: {navigate}}) {
                 isHT: str.startsWith("#"),
                 idxArr,
             };
-        })
-        return valueInfos;
+        });
     };
 
+    //컨텐츠
     const [title, setTitle] = useState<string>("");
     const valueInfos = getValueInfos(title);
 
+    const { width: SCREEN_WIDTH } = useWindowDimensions();
+    const imageHeight = Math.floor(((SCREEN_WIDTH * 0.8) / 16) * 9);
     const getCtrg=async ()=>{
         try{
             setLoading(true);
@@ -195,21 +229,15 @@ export default function ImageSelecter({navigation: {navigate}}) {
 
 
     const pickImage = async () => {
-        // No permissions request is necessary for launching the image library
-        let result = await ImagePicker.launchImageLibraryAsync({
+        const result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
-            type: 'multipart/form-data',
             allowsEditing: true,
-            aspect: [4, 3],
+            aspect: [16, 9],
             quality: 1,
-            title: 'Pick an image from camera roll'
         });
 
-        console.log(result);
-
-        if (!result.cancelled) {
-            setImage(result.uri);
-            return null;
+        if (result.cancelled === false) {
+            setImageURI(result.uri);
         }
     };
 
@@ -236,20 +264,6 @@ export default function ImageSelecter({navigation: {navigate}}) {
         //홈화면 새로고침 기능 넣기
     }
 
-    /*   const ImagePickerComponent=()=>{
-           //권한 요청을 위한 hooks
-           const [status, requesetPermission] = ImagePicker.useMediaLibraryPermissions();
-
-           const uploadImage=async ()=>{
-               if(!status?.granted){
-                   const permission = await requesetPermission();
-                   if(!permission.granted){
-                       return null;
-                   }
-               }
-           }
-       }*/
-
 
     const createHomeFeed=async ()=>{
         try{
@@ -272,13 +286,26 @@ export default function ImageSelecter({navigation: {navigate}}) {
         <Container>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <Wrapper>
-                    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                        <ImageArea title='Pick an image from camera roll' onPress={pickImage}/>
+                    <ImagePickerView>
+                        <ImagePickerButton
+                            height={imageHeight}
+                            onPress={pickImage}
+                            activeOpacity={0.8}
+                        >
+                            {imageURI ? (
+                                <PickedImage height={imageHeight} source={{ uri: imageURI }} />
+                            ) : (
+                                <ImagePickerText>대표 사진 설정</ImagePickerText>
+                            )}
+                        </ImagePickerButton>
+                    </ImagePickerView>
+
+                       {/* <ImageArea title={text? text: ""} onPress={pickImage}/>
                         {image && <Circle source={{ uri: image }} style={{ width: 350, height: 300 }}
-                        />}
-                    </View>
+                        />}*/}
+                    {/*</View>*/}
                     <TextInput
-                        style={{ color: 'transparent' }}
+                        style={{ color: 'transparent', height: 100}}
                         value={""}
                         placeholder="무엇을 할까요?"
                         onChangeText={setTitle}
@@ -348,9 +375,13 @@ export default function ImageSelecter({navigation: {navigate}}) {
                                 onPress={() => {
                                     if(image===null) {
                                         return Alert.alert("이미지를 선택하세요!");
-                                    }else if(category===null){
-                                        return Alert.alert("카테고리를 선택하세요!");
                                     }
+                                    else if(title===""){
+                                        return Alert.alert("문구를 입력해라");
+                                    }
+                                    /*else if(!category){
+                                        return Alert.alert("카테고리를 선택하세요!");
+                                    }*/
                                     else{
                                         createFinish();
                                     }

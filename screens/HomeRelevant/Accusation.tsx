@@ -43,7 +43,7 @@ export default function Accusation({navigation: {navigate}}){
 
     const ReportComplete = () => {
         navigate("HomeStack",{
-            screen:"ReportComplete.tsx"
+            screen:"ReportComplete"
         })
     }
 
