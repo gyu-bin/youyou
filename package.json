@@ -29,6 +29,7 @@
     "expo-image-picker": "~12.0.1",
     "expo-splash-screen": "~0.14.1",
     "expo-status-bar": "~1.2.0",
+    "form-data": "^4.0.0",
     "pretty-format": "^27.5.1",
     "react": "17.0.1",
     "react-dom": "17.0.1",
@@ -38,6 +39,7 @@
     "react-native-image-pan-zoom": "^2.1.12",
     "react-native-image-picker": "^4.7.3",
     "react-native-image-slider-box": "^1.1.24",
+    "react-native-mention-hashtag-text": "^1.0.3",
     "react-native-modal": "^12.1.0",
     "react-native-modalize": "^2.0.13",
     "react-native-pager-view": "5.4.9",
@@ -54,7 +56,8 @@
     "react-native-vector-icons": "^9.1.0",
     "react-native-web": "0.17.1",
     "react-query": "^3.38.1",
-    "styled-components": "^5.3.3"
+    "styled-components": "^5.3.3",
+    "taghash": "^1.2.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

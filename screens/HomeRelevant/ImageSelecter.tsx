@@ -15,6 +15,7 @@ import styled from "styled-components/native";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import SelectDropdown from "react-native-select-dropdown";
 import axios from "axios";
+import FormData from 'form-data'
 
 interface ValueInfo{
     str: string;
@@ -107,9 +108,9 @@ const ImagePickerView = styled.View`
 `;
 
 const ImagePickerButton = styled.TouchableOpacity<{ height: number }>`
-  width: 80%;
+  width: 95%;
   border-radius: 10px;
-  height: ${(props) => props.height}px;
+  height: 300px;
   justify-content: center;
   align-items: center;
   background-color: #c4c4c4;
@@ -123,11 +124,9 @@ const ImagePickerText = styled.Text`
 
 const PickedImage = styled.Image<{ height: number }>`
   width: 100%;
-  height: ${(props) => props.height}px;
+  height: 300px;
   border-radius: 10px;
 `;
-
-
 
 export default function ImageSelecter({navigation: {navigate}}) {
     const [image, setImage] = useState<string | null>(null);
@@ -137,11 +136,12 @@ export default function ImageSelecter({navigation: {navigate}}) {
     const [response, setResponse]=useState(null);
     const Stack = createNativeStackNavigator();
     const [refreshing, setRefreshing] = useState(false);
-    const [Home, setHome] = useState([{}]);
     const [loading, setLoading] = useState(true);
     const [data,setData]=useState([]);
     const [isSelect, setSelect] = useState([false, false, false]);
+    //사진권한 허용
     const [imageURI, setImageURI] = useState<string | null>(null);
+    const [status,requestPermission]= ImagePicker.useMediaLibraryPermissions();
 
     const getValueInfos = (value: string): ValueInfo[] => {
         if (value.length === 0) {
@@ -185,10 +185,10 @@ export default function ImageSelecter({navigation: {navigate}}) {
         try{
             setLoading(true);
             const response= await axios.post(
-                `http://3.39.190.23:8080/api/clubs`
+                `http://3.39.190.23:8080/api/feeds`
             );
-            setData(response.data.data.values)
-            console.log(data);
+            /*setData(response.data.data)
+            console.log(data);*/
         } catch (error) {
             console.error(error);
         } finally {
@@ -224,13 +224,20 @@ export default function ImageSelecter({navigation: {navigate}}) {
 
             ],
             { cancelable: false }
-
         );
 
 
     const pickImage = async () => {
+        if(!status?.granted){
+            const permission=await requestPermission();
+            if(!permission.granted){
+                return null;
+            }
+        }
+
         const result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsMultipleSelection: true,
             allowsEditing: true,
             aspect: [16, 9],
             quality: 1,
@@ -239,22 +246,9 @@ export default function ImageSelecter({navigation: {navigate}}) {
         if (result.cancelled === false) {
             setImageURI(result.uri);
         }
+
     };
 
-    const ImageSelector=(id: number)=>{
-        return(
-            <Pressable
-                onPress={() => {
-                    setSelect([
-                        ...isSelect.slice(0, id),
-                        !isSelect[id],
-                        ...isSelect.slice(id + 1),
-                    ]);
-                }}>
-                <ImageArea title='Pick an image from camera roll' onPress={pickImage}/>
-            </Pressable>
-        )
-    }
 
     const createFinish=()=>{
         Alert.alert("등록되었습니다.");
@@ -316,7 +310,7 @@ export default function ImageSelecter({navigation: {navigate}}) {
                             const isLast = idx === valueInfos.length - 1;
                             if (isHT) {
                                 return (
-                                    <Text style={{color: 'white', backgroundColor: 'blue'}}>
+                                    <Text style={{color: 'skyblue', backgroundColor: 'transparent'}}>
                                         {value}
                                         {!isLast && <Text style={{backgroundColor: 'transparent'}}>{" "}</Text>}
                                     </Text>
@@ -332,21 +326,6 @@ export default function ImageSelecter({navigation: {navigate}}) {
                     </TextInput>
                     <OptionSelector>
                         <CtgrArea>
-                            {/*<View style={{ flex: 1, padding: 10, width: 2000 }}>
-                            {loading ? <ActivityIndicator/> : (
-                                    <FlatList
-                                        refreshing={refreshing}
-                                        //onRefresh={onRefresh}
-                                        data={data}
-                                        keyExtractor={({ id }, index) => id}
-                                        renderItem={({ item }) => (
-                                            <>
-                                                <Text>{item.name}</Text>
-                                            </>
-                                        )}
-                                    />
-                            )}
-                        </View>*/}
                             <Text>내 모임</Text>
                             <SelectDropdown
                                 data={category}
@@ -373,7 +352,7 @@ export default function ImageSelecter({navigation: {navigate}}) {
                         <ButtonArea>
                             <NextButton
                                 onPress={() => {
-                                    if(image===null) {
+                                    if(imageURI===null) {
                                         return Alert.alert("이미지를 선택하세요!");
                                     }
                                     else if(title===""){
@@ -387,7 +366,7 @@ export default function ImageSelecter({navigation: {navigate}}) {
                                     }
                                 }}
                             >
-                                <ButtonText>공유하기</ButtonText>
+                                <ButtonText onPress={createPeed}>공유하기</ButtonText>
                             </NextButton>
                         </ButtonArea>
                     </AllBtn>

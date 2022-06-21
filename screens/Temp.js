@@ -5,83 +5,6 @@ import styled from "styled-components";
 import { search } from "./temp/config";
 import mixIn from "../screens/temp/Minxin";
 
-export default function Temp({ navigation }) {
-    const [searchVal, setSearchVal] = useState("");
-    const [data, setData] = useState();
-    const searchRef = useRef();
-
-    const searchData = async (text) => {
-        try {
-            setSearchVal(text);
-            const res = await fetch(`http://3.39.190.23:8080/api/feeds/1/search`, {
-                method: "POST",
-                body: JSON.stringify({
-                    keyword: text,
-                }),
-            });
-            const resJson = await res.json();
-            const newResJson = resJson.products;
-            setData(newResJson);
-        } catch (e) {
-            console.log("페치에 실패했습니다.");
-        }
-    };
-
-    const renderItem = ({ item }) => {
-        return (
-            <ResultList
-                onPress={() =>
-                    navigation.navigate("ProductDetail", {
-                        productId: item.id,
-                    })
-                }
-            >
-                <ResultItem>{item.name}</ResultItem>
-            </ResultList>
-        );
-    };
-
-    const clearInput = () => {
-        searchRef.current.ref.clear();
-        setSearchVal("");
-        setData("");
-    };
-
-    return (
-        <Container>
-            <SearchBarWrap>
-                <SearchIcon
-                    source={{
-                        uri: "https://webstockreview.net/images/search-icon-png-4.png",
-                    }}
-                    touch={searchVal}
-                />
-                <SearchBar
-                    ref={searchRef}
-                    placeholder="검색어를 입력해 주세요"
-                    onChangeText={(text) => searchData(text)}
-                    touch={searchVal}
-                    animation={searchVal.length > 0 ? typed : false}
-                                    />
-                <Cancel
-                    touch={searchVal}
-                    animation={searchVal.length > 0 ? btnIn : false}
-                    onPress={() => clearInput()}
-                >
-                    <Text>취소</Text>
-                </Cancel>
-            </SearchBarWrap>
-            <ResultContainer>
-                <FlatList
-                    data={data}
-                    renderItem={renderItem}
-                    keyExtractor={(item, idx) => idx.toString()}
-                />
-            </ResultContainer>
-        </Container>
-    );
-}
-
 const Container = styled.View``;
 
 const SearchBarWrap = styled.View`
@@ -153,3 +76,82 @@ const btnIn = {
         animation: "slideInRight",
     },
 };
+
+export default function Temp({ navigation }) {
+    const [searchVal, setSearchVal] = useState("");
+    const [data, setData] = useState();
+    const searchRef = useRef();
+
+    const searchData = async (text) => {
+        try {
+            setSearchVal(text);
+            const res = await fetch(`http://3.39.190.23:8080/api/feeds/1/search`, {
+                method: "POST",
+                body: JSON.stringify({
+                    keyword: text,
+                }),
+            });
+            const resJson = await res.json();
+            const newResJson = resJson.data;
+            setData(newResJson);
+        } catch (e) {
+            console.log("페치에 실패했습니다.");
+        }
+    };
+
+    const renderItem = ({ item }) => {
+        return (
+            <ResultList
+                onPress={() =>
+                    navigation.navigate("ProductDetail", {
+                        productId: item.id,
+                    })
+                }
+            >
+                <ResultItem>{item.name}</ResultItem>
+            </ResultList>
+        );
+    };
+
+    const clearInput = () => {
+        searchRef.current.ref.clear();
+        setSearchVal("");
+        setData("");
+    };
+
+    return (
+        <Container>
+            <SearchBarWrap>
+                <SearchIcon
+                    source={{
+                        uri: "https://webstockreview.net/images/search-icon-png-4.png",
+                    }}
+                    touch={searchVal}
+                />
+                <SearchBar
+                    ref={searchRef}
+                    placeholder="검색어를 입력해 주세요"
+                    onChangeText={(text) => searchData(text)}
+                    touch={searchVal}
+                    animation={searchVal.length > 0 ? typed : false}
+                                    />
+                <Cancel
+                    touch={searchVal}
+                    animation={searchVal.length > 0 ? btnIn : false}
+                    onPress={() => clearInput()}
+                >
+                    <Text>취소</Text>
+                </Cancel>
+            </SearchBarWrap>
+            <ResultContainer>
+                <FlatList
+                    data={data}
+                    renderItem={renderItem}
+                    keyExtractor={(item, idx) => idx.toString()}
+                />
+            </ResultContainer>
+        </Container>
+    );
+}
+
+

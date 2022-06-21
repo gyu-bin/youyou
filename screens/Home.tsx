@@ -27,7 +27,13 @@ import { SliderBox } from "react-native-image-slider-box";
 import axios from "axios";
 import Icon from "react-native-vector-icons/Ionicons";
 import {Ionicons} from "@expo/vector-icons";
+import  MentionHashtagTextView  from  "react-native-mention-hashtag-text";
 
+interface ValueInfo{
+    str: string;
+    isHT: boolean;
+    idxArr: number[];
+}
 const Container = styled.SafeAreaView`
   position: relative;
   flex-direction: column;
@@ -72,7 +78,7 @@ const MainText=styled.View`
   height: 60px;
 `
 
-const LogoImage=styled.Image`
+const UserImage=styled.Image`
   width: 45px;
   height: 45px;
   border-radius: 100px;
@@ -159,6 +165,7 @@ const Ment = styled.Text`
   color: black;
   margin-left: 2%;
 `
+
 const HashTag=styled.Text`
   color: rgb(99,171,255);
 `
@@ -166,7 +173,7 @@ const HashTag=styled.Text`
 const Wrapper = styled.View`
   flex: 1;
   background-color: white;
-  top: 10px;
+  top: 5%;
 `;
 
 const OptionArea = styled.View`
@@ -260,6 +267,8 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
     const [isSelect, setSelect] = useState([false, false, false]);
     const [activeSection, setActiveSection] = useState([]);
     const [number, setNumber] = useState(rand(1,100));
+
+    const taghash = require('taghash');
 
     const getApi=async ()=>{
         try{
@@ -427,7 +436,12 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
             </Pressable>
         );
     };
-
+    const mentionHashtagClick = (text) => {
+       Alert.alert("Clicked to + " + text);
+        /*navigate("HomeStack",{
+            screen:"ReplyPage"
+        })*/
+    };
     return (
         <Container>
             <Wrapper>
@@ -444,7 +458,7 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
                         <HeaderStyle>
                             <HeaderText>
                                 <MainText>
-                                    <LogoImage source={{uri: 'https://i.pinimg.com/564x/9e/d8/4c/9ed84cf3fc04d0011ec4f75c0692c83e.jpg'}}/>
+                                    <UserImage source={{uri: 'https://i.pinimg.com/564x/9e/d8/4c/9ed84cf3fc04d0011ec4f75c0692c83e.jpg'}}/>
                                     <View>
                                         <UserId>이진규
                                             {/*<FlatList
@@ -531,11 +545,11 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
                                 <LikeArea>
                                     <TouchableOpacity onPress={() => setHeartSelected(!heartSelected)}>
                                         {heartSelected ? (
-                                            <TouchableOpacity onPress={()=>onIncrease()}>
+                                            <TouchableOpacity >
                                                 <Ionicons name="md-heart" size={24} color="red" />
                                             </TouchableOpacity>
                                         ) : (
-                                            <TouchableOpacity onPress={()=>onDecrease()}>
+                                            <TouchableOpacity >
                                                 <Ionicons name="md-heart-outline" size={24} color="red"/>
                                             </TouchableOpacity>
                                         )}
@@ -551,20 +565,21 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
                                     <Text style={{left: 5, fontWeight: 'normal', top: 5}}>{rand(1,100)}</Text>
                                 </ReplyArea>
                                 <TouchableOpacity onPress={()=>onShare()}>
-                                    <Icon name="md-share" size={30} style={{
-                                        marginLeft: 15,
+                                    <Icon name="md-share-outline" size={30} style={{
+                                        marginLeft: 11,
                                         color: 'black',
+                                        top: 2
                                     }}/>
                                 </TouchableOpacity>
                                 <DataArea>
                                     <Text style={{color: 'grey', left: 150}}>
-                                        2022년 6월 15일
+                                        2022년 6월 20일
                                     </Text>
                                 </DataArea>
                             </LikeMent>
                         </TextArea>
                         <ContentMent>
-                            {/*<View style={{ flex: 1, padding: 10, width: 2000 }}>
+                            <View style={{ flex: 1, padding: 10, width: 2000 }}>
                                     {loading ? <ActivityIndicator/> : (
                                         <ScrollView>
                                             <FlatList
@@ -575,23 +590,28 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
                                                 renderItem={({ item }) => (
                                                     <View style={{flexDirection: 'row'}}>
                                                         <MentId>{item.userName}</MentId>
-                                                        <Ment numberOfLines={3} ellipsizeMode={"tail"}>{item.content}</Ment>
-
+                                                        <MentionHashtagTextView
+                                                            mentionHashtagPress={mentionHashtagClick}
+                                                            mentionHashtagColor={"#63ABFF"}
+                                                        >
+                                                            {item.content}
+                                                        </MentionHashtagTextView>
+                                                        {/*<Ment text={text} numberOfLines={3} ellipsizeMode={"tail"}>{item.content}</Ment>*/}
                                                     </View>
                                                 )}
                                             />
                                         </ScrollView>
                                     )}
-                                </View>*/}
-                            <MentId>유주은</MentId>
+                                </View>
+                          {/*  <MentId>유주은</MentId>
                             <Ment> 디자인 이쁘다</Ment>
-                            <HashTag>#잘 뽑혔구먼</HashTag>
+                            <HashTag>#잘 뽑혔구먼</HashTag>*/}
                         </ContentMent>
                     </MainArea>
                 )}></FlatList>
                 <FloatingButton onPress={goToContent}>
                     <Ionicons name="ios-add-sharp" size={28} color="black"
-                              style={{}}
+
                     />
                 </FloatingButton>
             </Wrapper>

@@ -21,6 +21,7 @@ const Container = styled.SafeAreaView`
   height: 100%;
   position: absolute;
   width: 100%;
+  
 `;
 
 const LogoImage=styled.Image`
@@ -212,7 +213,6 @@ const ReplyPage:React.FC<NativeStackScreenProps<any, "ReplyPage">> = ({
                 <UnderBar/>
             <View>
                 {loading ? <ActivityIndicator/> : (
-                    <ScrollView>
                         <FlatList
                             refreshing={refreshing}
                             onRefresh={onRefresh}
@@ -227,10 +227,10 @@ const ReplyPage:React.FC<NativeStackScreenProps<any, "ReplyPage">> = ({
                                             <Comment>{item.content}</Comment>
                                         </CommentMent>
                                         <CommentRemainder>
-                                            <Time>{rand(1,60)}분</Time>
-                                            {/*<Time>{item.created}</Time>*/}
+                                            {/*<Time>{rand(1,60)}분</Time>*/}
+                                            <Time>{item.created}</Time>
                                             <Like>좋아요 {rand(1,100)} 개</Like>
-                                            <TouchableOpacity onPress={()=>goToHome(item)}>
+                                            <TouchableOpacity onPress={()=>goToHome()}>
                                                 <Text>답글 달기</Text>
                                             </TouchableOpacity>
                                             <TouchableOpacity onPress={() => setHeartSelected(!heartSelected)}>
@@ -245,7 +245,6 @@ const ReplyPage:React.FC<NativeStackScreenProps<any, "ReplyPage">> = ({
                                 </CommentArea>
                                                 )}
                                             />
-                    </ScrollView>
                                     )}
             </View>
             {/*<FlatList
