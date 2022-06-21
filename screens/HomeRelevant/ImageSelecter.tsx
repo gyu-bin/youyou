@@ -15,7 +15,6 @@ import styled from "styled-components/native";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import SelectDropdown from "react-native-select-dropdown";
 import axios from "axios";
-import FormData from 'form-data'
 
 interface ValueInfo{
     str: string;

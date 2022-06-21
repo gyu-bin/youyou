@@ -268,7 +268,18 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
     const [activeSection, setActiveSection] = useState([]);
     const [number, setNumber] = useState(rand(1,100));
 
-    const taghash = require('taghash');
+    //현재시간
+    let today = new Date(); // today 객체에 Date()의 결과를 넣어줬다
+    let time = {
+        year: today.getFullYear(),  //현재 년도
+        month: today.getMonth() + 1, // 현재 월
+        date: today.getDate(), // 현제 날짜
+        hours: today.getHours(), //현재 시간
+        minutes: today.getMinutes(), //현재 분
+    };
+    let timestring = `${time.year}/${time.month}/${time.date} ${time.hours}:${time.minutes}`;
+
+
 
     const getApi=async ()=>{
         try{
@@ -442,6 +453,8 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
             screen:"ReplyPage"
         })*/
     };
+
+
     return (
         <Container>
             <Wrapper>
@@ -573,7 +586,7 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
                                 </TouchableOpacity>
                                 <DataArea>
                                     <Text style={{color: 'grey', left: 150}}>
-                                        2022년 6월 20일
+                                        {timestring}
                                     </Text>
                                 </DataArea>
                             </LikeMent>
