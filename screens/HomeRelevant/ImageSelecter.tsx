@@ -15,6 +15,9 @@ import styled from "styled-components/native";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import SelectDropdown from "react-native-select-dropdown";
 import axios from "axios";
+import {ClubApi, ClubCreationRequest, FeedCreateRequest, feedCreateRequest, HomeApi} from "../../api";
+import {ImageSelecterProps} from "../../types/home";
+import {useMutation} from "react-query";
 
 interface ValueInfo{
     str: string;
@@ -127,7 +130,16 @@ const PickedImage = styled.Image<{ height: number }>`
   border-radius: 10px;
 `;
 
-export default function ImageSelecter({navigation: {navigate}}) {
+const ImageSelecter: React.FC<ImageSelecterProps> = ({
+  route: {
+    params: {
+        clubId,
+        content,
+        imageUri,
+    },
+},
+    navigation: { navigate },
+    }) => {
     const [image, setImage] = useState<string | null>(null);
     let [text, onChangeText]=useState("사진을 선택하세요")
     const [selectCategory, setCategory] = useState(null);
@@ -153,7 +165,7 @@ export default function ImageSelecter({navigation: {navigate}}) {
             idx += str.length + 1;
             return {
                 str,
-                isHT: str.startsWith("#"),
+                isHT: str.startsWith("#") || str.startsWith("@"),
                 idxArr,
             };
         });
@@ -180,24 +192,124 @@ export default function ImageSelecter({navigation: {navigate}}) {
         }
     }
 
-    const createPeed=async ()=>{
+   /* const createPeed=async ()=>{
         try{
             setLoading(true);
             const response= await axios.post(
-                `http://3.39.190.23:8080/api/feeds`
+                `http://localhost:8080/api/feeds`,
             );
-            /*setData(response.data.data)
-            console.log(data);*/
+            setData(response.data.data)
+            console.log(data);
         } catch (error) {
             console.error(error);
         } finally {
             setLoading(false);
         }
-    }
+    }*/
 
-    useEffect(()=>{
-        getCtrg();
-    },[]);
+/*    const createPeed = () => {
+        const body = new FormData();
+        try{
+            if (image !== null) {
+                body.append("file", image);
+            }
+            body.append("", JSON.stringify(data));
+
+            return fetch(`http://localhost:8080/api/feeds`, {
+                method: "POST",
+                headers: {
+                    "content-type": "multipart/form-data",
+                    authorization:
+                        "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiLsnqXspIDsmqkiLCJzb2NpYWxJZCI6IjIxOTAwMzc4NTAiLCJpZCI6MzQsImV4cCI6MTY1MzQwNTc0NH0.gJEnm383IbZQ2QS0ldY4RNEmxhRb-hTtFSaeqSymIb8rKZyvMEmCCTLm5rSvur-dtTRpVPy-jLzz_dpKL-kXgA",
+                    Accept: "application/json",
+                },
+                body,
+            }).then((res) => res.json());
+        }catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    };*/
+    const mutation = useMutation(HomeApi.createPeed, {
+        onMutate: (data) => {
+            console.log("--- Mutate ---");
+            console.log(data);
+        },
+        onSuccess: (data) => {
+            console.log("--- Success ---");
+            console.log(data);
+        },
+        onError: (error) => {
+            console.log("--- Error ---");
+            console.log(error);
+        },
+        onSettled: (data, error) => {
+            console.log("--- Settled ---");
+            console.log(data);
+            console.log(error);
+        },
+    });
+
+    const onSubmit = () => {
+        console.log("clubId1: " + clubId);
+        console.log("content: " + content);
+        console.log("imageUrl: " + imageUri);
+
+        const data = {
+            clubId: clubId,
+            content: content,
+            imageUri: imageUri
+        };
+
+        const splitedURI = new String(imageUri).split("/");
+
+        const requestData: FeedCreateRequest =
+            imageUri === null
+                ? {
+                    image: null,
+                    data,
+                }
+                : {
+                    image: {
+                        uri: imageUri,
+                        type: "image/jpeg",
+                        name: splitedURI[splitedURI.length - 1],
+                    },
+                    data,
+                };
+
+        mutation.mutate(requestData);
+
+        // 결과값 받아서 한번 더 화면 분기할 것.
+
+        return navigate("Tabs", { screen: "Home" });
+    };
+
+    const createPeed = async () => {
+        try {
+            const res = await fetch(`http://localhost:8080/api/feeds`, {
+                method: "POST",
+                headers: {
+                    "content-type": "multipart/form-data",
+                    authorization:
+                        "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiLsnqXspIDsmqkiLCJzb2NpYWxJZCI6IjIxOTAwMzc4NTAiLCJpZCI6MzQsImV4cCI6MTY1MzQwNTc0NH0.gJEnm383IbZQ2QS0ldY4RNEmxhRb-hTtFSaeqSymIb8rKZyvMEmCCTLm5rSvur-dtTRpVPy-jLzz_dpKL-kXgA",
+                    Accept: "application/json",
+                },body: 'feedCreateRequest'
+            });
+            const resJson = await res.json();
+            const newResJson = resJson.data;
+            setData(newResJson);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+/*    useEffect(()=>{
+        // getCtrg();
+        createPeed();
+    },[]);*/
 
     //카테고리 선택
     const [selectedValue, setSelectedValue]=useState('독서');
@@ -298,9 +410,9 @@ export default function ImageSelecter({navigation: {navigate}}) {
                         />}*/}
                     {/*</View>*/}
                     <TextInput
-                        style={{ color: 'transparent', height: 100}}
-                        value={""}
-                        placeholder="무엇을 할까요?"
+                        style={{ color: 'transparent', height: 100, borderStyle:'solid', borderColor: 'black'}}
+                        key={"FeedCreateRequest"}
+                        placeholder="글을 적어보세요!"
                         onChangeText={setTitle}
                     >
                         {valueInfos.map(({ str, isHT, idxArr }, idx) => {
@@ -351,21 +463,22 @@ export default function ImageSelecter({navigation: {navigate}}) {
                         <ButtonArea>
                             <NextButton
                                 onPress={() => {
-                                    if(imageURI===null) {
+                                   /* if(imageURI===null) {
                                         return Alert.alert("이미지를 선택하세요!");
                                     }
                                     else if(title===""){
                                         return Alert.alert("문구를 입력해라");
                                     }
-                                    /*else if(!category){
+                                    /!*else if(!category){
                                         return Alert.alert("카테고리를 선택하세요!");
-                                    }*/
+                                    }*!/
                                     else{
                                         createFinish();
-                                    }
+                                    }*/
+                                    createFinish();
                                 }}
                             >
-                                <ButtonText onPress={createPeed}>공유하기</ButtonText>
+                                <ButtonText onPress={onSubmit}>공유하기</ButtonText>
                             </NextButton>
                         </ButtonArea>
                     </AllBtn>
@@ -374,3 +487,5 @@ export default function ImageSelecter({navigation: {navigate}}) {
         </Container>
     );
 }
+
+export default ImageSelecter

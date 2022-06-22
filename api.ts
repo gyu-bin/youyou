@@ -65,9 +65,42 @@ export interface ClubCreationRequest {
   };
 }
 
+export interface FeedCreateRequest {
+  image: {
+    uri: string;
+    type: string;
+    name: string | undefined;
+  } | null;
+  data: {
+    clubId: number;
+    content: string;
+  };
+}
+
 export interface LoginRequest {
   token: string;
 }
+
+//피드생성
+const createPeed = (req: FeedCreateRequest) => {
+  const body = new FormData();
+
+  if (req.image !== null) {
+    body.append("file", req.image);
+  }
+  body.append("FeedCreateRequest", JSON.stringify(req.data));
+
+  return fetch(`${BASE_URL}/api/feeds`, {
+    method: "POST",
+    headers: {
+      "content-type": "multipart/form-data",
+      authorization:
+          "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiLsnqXspIDsmqkiLCJzb2NpYWxJZCI6IjIxOTAwMzc4NTAiLCJpZCI6MzQsImV4cCI6MTY1MzQwNTc0NH0.gJEnm383IbZQ2QS0ldY4RNEmxhRb-hTtFSaeqSymIb8rKZyvMEmCCTLm5rSvur-dtTRpVPy-jLzz_dpKL-kXgA",
+      Accept: "application/json",
+    },
+    body,
+  }).then((res) => res.json());
+};
 
 const getCategories = () => fetch(`${BASE_URL}/api/categories`).then((res) => res.json());
 
@@ -103,5 +136,6 @@ const getJWT = (req: LoginRequest) => {
   }).then((res) => res.json());
 };
 
+export const HomeApi= {createPeed};
 export const ClubApi = { getCategories, getClubs, createClub };
 export const CommonApi = { getJWT };

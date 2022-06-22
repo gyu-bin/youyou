@@ -173,7 +173,6 @@ const HashTag=styled.Text`
 const Wrapper = styled.View`
   flex: 1;
   background-color: white;
-  top: 5%;
 `;
 
 const OptionArea = styled.View`
