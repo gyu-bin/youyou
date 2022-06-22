@@ -230,9 +230,6 @@ const ReplyPage:React.FC<NativeStackScreenProps<any, "ReplyPage">> = ({
                                             {/*<Time>{rand(1,60)}분</Time>*/}
                                             <Time>{item.created}</Time>
                                             <Like>좋아요 {rand(1,100)} 개</Like>
-                                            <TouchableOpacity onPress={()=>goToHome()}>
-                                                <Text>답글 달기</Text>
-                                            </TouchableOpacity>
                                             <TouchableOpacity onPress={() => setHeartSelected(!heartSelected)}>
                                                 {heartSelected ? (
                                                     <Ionicons name="md-heart" size={24} color="red" />

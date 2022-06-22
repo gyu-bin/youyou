@@ -16,11 +16,10 @@ import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import * as Animatable from 'react-native-animatable'
 import IntroduceGroup from '../screens/SearchPage/IntroduceGroup'
 import Peed from '../screens/SearchPage/Peed'
+import PeedSelectPage from "./SearchPage/PeedSelectPage";
 
 const NativeStack = createNativeStackNavigator();
 const TopTab = createMaterialTopTabNavigator();
-import Icon from 'react-native-vector-icons/Ionicons'
-import axios from "axios";
 import styled from "styled-components";
 import SearchTest from '../screens/Temp'
 
@@ -50,6 +49,9 @@ const Feed = () => (
 const Temp=()=>(
     <SearchTest/>
 )
+const PeedSelect=()=>(
+    <PeedSelectPage/>
+)
 
 const ClubHomeTopTabs=()=>{
     return (
@@ -76,7 +78,7 @@ const ClubHomeTopTabs=()=>{
             <TopTab.Screen
                 options={{title: "태그"}}
                 name="Tag"
-                component={Feed}/>
+                component={PeedSelect}/>
             </TopTab.Navigator>
         </Wrapper>
     );

@@ -1,4 +1,4 @@
-const BASE_URL = "http://3.39.190.23:8080/api";
+const BASE_URL = "http://3.39.190.23:8080";
 
 interface BaseResponse {
   resultCode: string;
@@ -65,10 +65,13 @@ export interface ClubCreationRequest {
   };
 }
 
-const getCategories = () =>
-  fetch(`${BASE_URL}/categories`).then((res) => res.json());
+export interface LoginRequest {
+  token: string;
+}
 
-const getClubs = () => fetch(`${BASE_URL}/clubs`).then((res) => res.json());
+const getCategories = () => fetch(`${BASE_URL}/api/categories`).then((res) => res.json());
+
+const getClubs = () => fetch(`${BASE_URL}/api/clubs`).then((res) => res.json());
 
 const createClub = (req: ClubCreationRequest) => {
   const body = new FormData();
@@ -78,16 +81,27 @@ const createClub = (req: ClubCreationRequest) => {
   }
   body.append("clubCreateRequest", JSON.stringify(req.data));
 
-  return fetch(`${BASE_URL}/clubs`, {
+  return fetch(`${BASE_URL}/api/clubs`, {
     method: "POST",
     headers: {
       "content-type": "multipart/form-data",
       authorization:
-        "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiLsnqXspIDsmqkiLCJzb2NpYWxJZCI6IjIxOTAwMzc4NTAiLCJpZCI6MzQsImV4cCI6MTY1MzQwNTc0NH0.gJEnm383IbZQ2QS0ldY4RNEmxhRb-hTtFSaeqSymIb8rKZyvMEmCCTLm5rSvur-dtTRpVPy-jLzz_dpKL-kXgA",
+          "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiLsnqXspIDsmqkiLCJzb2NpYWxJZCI6IjIxOTAwMzc4NTAiLCJpZCI6MzQsImV4cCI6MTY1MzQwNTc0NH0.gJEnm383IbZQ2QS0ldY4RNEmxhRb-hTtFSaeqSymIb8rKZyvMEmCCTLm5rSvur-dtTRpVPy-jLzz_dpKL-kXgA",
       Accept: "application/json",
     },
     body,
   }).then((res) => res.json());
 };
 
+const getJWT = (req: LoginRequest) => {
+  return fetch(`${BASE_URL}/login/kakao/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(req),
+  }).then((res) => res.json());
+};
+
 export const ClubApi = { getCategories, getClubs, createClub };
+export const CommonApi = { getJWT };

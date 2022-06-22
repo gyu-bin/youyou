@@ -96,7 +96,7 @@ const CtrgArea=styled.View`
   border-radius: 5px;
   top: 2px;
 `
-const CtgrText= styled.Text`
+const CtgrText= styled.TouchableOpacity`
   margin: 3px 5px 3px 5px;
   color: white;
 `
@@ -278,7 +278,6 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
         minutes: today.getMinutes(), //현재 분
     };
     let timestring = `${time.year}/${time.month}/${time.date} ${time.hours}:${time.minutes}`;
-
 
 
     const getApi=async ()=>{
@@ -488,7 +487,10 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
                                         />*/}
                                         </UserId>
                                         <CtrgArea>
-                                            <CtgrText>온유프로젝트</CtgrText>
+                                            <CtgrText onPress={goToReply}>
+                                                <Text>
+                                                    온유프로젝트
+                                                </Text></CtgrText>
                                         </CtrgArea>
                                     </View>
                                 </MainText>
@@ -602,7 +604,6 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
                                                 keyExtractor={(item, index) => index + ""}
                                                 renderItem={({ item }) => (
                                                     <View style={{flexDirection: 'row'}}>
-                                                        <MentId>{item.userName}</MentId>
                                                         <MentionHashtagTextView
                                                             mentionHashtagPress={mentionHashtagClick}
                                                             mentionHashtagColor={"#63ABFF"}

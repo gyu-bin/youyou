@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {ActivityIndicator, FlatList,TouchableOpacity, Button, Text} from 'react-native';
+import {ActivityIndicator, FlatList, TouchableOpacity, Button, Text, ScrollView, View, Image} from 'react-native';
 import {StatusBar} from "expo-status-bar";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 //img
 import {Searchbar} from "react-native-paper";
 import styled from "styled-components/native";
+import axios from "axios";
 
 const Wrapper = styled.View`
   flex: 1;
@@ -62,16 +63,35 @@ export default function IntroduceGroup(){
     const Stack = createNativeStackNavigator();
     const onChangeSearch = query => setSearchQuery(query);
 
-/*    const getSearch = () => {
+    const getApi=async ()=>{
+        try{
+            setLoading(true);
+            const response= await axios.get(
+                `http://3.39.190.23:8080/api/clubs`
+            )
+            setData(response.data.data.values)
+            console.log(data)
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    useEffect(()=>{
+        getApi();
+    },[]);
+
+    const getSearch = () => {
         const result = [];
         for (let i = 0; i < 10; ++i) {
             result.push({
-                /!* id: i,
+                /* id: i,
                  img:
                      "https://i.pinimg.com/564x/96/a1/11/96a111a649dd6d19fbde7bcbbb692216.jpg",
                  name: "문규빈",
                  content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-                 memberNum: Math.ceil(Math.random() * 10),*!/
+                 memberNum: Math.ceil(Math.random() * 10),*/
             });
         }
 
@@ -82,20 +102,41 @@ export default function IntroduceGroup(){
         setLoading(false);
     };
 
-    useEffect(() => {
+    useEffect(()=>{
         getData();
-    }, []);
+    },[]);
 
     const onRefresh = async () => {
         setRefreshing(true);
         await getData();
         setRefreshing(false);
-    };*/
+    };
 
     return (
         <Container>
             <StatusBar style="auto"/>
-            <Text>모임들</Text>
+            <View>
+                {loading ? <ActivityIndicator/> : (
+                    <View>
+                        <FlatList
+                            refreshing={refreshing}
+                            onRefresh={onRefresh}
+                            data={data}
+                            keyExtractor={(item, index) => index + ""}
+                            renderItem={({ item }) => (
+                                <View style={{flexDirection: 'row'}}>
+                                    <Image style={{width: 50, height: 50}} source={{uri: item.thumbnail}}/>
+                                    <View style={{flexDirection: 'column'}}>
+                                        <Text>{item.name}</Text>
+                                        <Text>{item.clubShortDesc}</Text>
+                                    </View>
+                                    {/*<Ment text={text} numberOfLines={3} ellipsizeMode={"tail"}>{item.content}</Ment>*/}
+                                </View>
+                            )}
+                        />
+                    </View>
+                )}
+            </View>
         </Container>
     )
 }
