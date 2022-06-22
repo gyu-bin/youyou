@@ -103,7 +103,7 @@ const CtgrText= styled.TouchableOpacity`
 
 //ModalStyle
 const ModalStyle=styled.Modal`
-  
+
 `
 const PeedId=styled.Text`
   color: black;
@@ -140,7 +140,7 @@ const ReplyArea=styled.View`
   flex-direction: row;
 `
 const DataArea=styled.View`
-  
+
 `
 
 const BoldText1=styled.TouchableOpacity`
@@ -446,7 +446,7 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
         );
     };
     const mentionHashtagClick = (text) => {
-       Alert.alert("Clicked to + " + text);
+        Alert.alert("Clicked to + " + text);
         /*navigate("HomeStack",{
             screen:"ReplyPage"
         })*/
@@ -480,7 +480,6 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
                                             renderItem={({ item }) => (
                                                 <>
                                                     <PeedId><Text>{item.userName}</Text></PeedId>
-
                                                 </>
                                             )}
                                         />*/}
@@ -499,7 +498,6 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
                                             color: 'black',
                                         }}/>
                                         {/*<View onPress={toggleModal}>
-
                                             </View>*/}
                                     </TouchableOpacity>
                                     <View>
@@ -559,13 +557,9 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
                                 <LikeArea>
                                     <TouchableOpacity onPress={() => setHeartSelected(!heartSelected)}>
                                         {heartSelected ? (
-                                            <TouchableOpacity >
-                                                <Ionicons name="md-heart" size={24} color="red" />
-                                            </TouchableOpacity>
+                                            <Ionicons name="md-heart" size={24} color="red" />
                                         ) : (
-                                            <TouchableOpacity >
-                                                <Ionicons name="md-heart-outline" size={24} color="red"/>
-                                            </TouchableOpacity>
+                                            <Ionicons name="md-heart-outline" size={24} color="red" />
                                         )}
                                     </TouchableOpacity>
                                     <BoldText2>{number}</BoldText2>
@@ -594,29 +588,29 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
                         </TextArea>
                         <ContentMent>
                             <View style={{ flex: 1, padding: 10, width: 2000 }}>
-                                    {loading ? <ActivityIndicator/> : (
-                                        <ScrollView>
-                                            <FlatList
-                                                refreshing={refreshing}
-                                                onRefresh={onRefresh}
-                                                data={data}
-                                                keyExtractor={(item, index) => index + ""}
-                                                renderItem={({ item }) => (
-                                                    <View style={{flexDirection: 'row'}}>
-                                                        <MentionHashtagTextView
-                                                            mentionHashtagPress={mentionHashtagClick}
-                                                            mentionHashtagColor={"#63ABFF"}
-                                                        >
-                                                            {item.content}
-                                                        </MentionHashtagTextView>
-                                                        {/*<Ment text={text} numberOfLines={3} ellipsizeMode={"tail"}>{item.content}</Ment>*/}
-                                                    </View>
-                                                )}
-                                            />
-                                        </ScrollView>
-                                    )}
-                                </View>
-                          {/*  <MentId>유주은</MentId>
+                                {loading ? <ActivityIndicator/> : (
+                                    <View>
+                                        <FlatList
+                                            refreshing={refreshing}
+                                            onRefresh={onRefresh}
+                                            data={data}
+                                            keyExtractor={(item, index) => index + ""}
+                                            renderItem={({ item }) => (
+                                                <View style={{flexDirection: 'row'}}>
+                                                    <MentionHashtagTextView
+                                                        mentionHashtagPress={mentionHashtagClick}
+                                                        mentionHashtagColor={"#63ABFF"}
+                                                    >
+                                                        {item.content}
+                                                    </MentionHashtagTextView>
+                                                    {/*<Ment text={text} numberOfLines={3} ellipsizeMode={"tail"}>{item.content}</Ment>*/}
+                                                </View>
+                                            )}
+                                        />
+                                    </View>
+                                )}
+                            </View>
+                            {/*  <MentId>유주은</MentId>
                             <Ment> 디자인 이쁘다</Ment>
                             <HashTag>#잘 뽑혔구먼</HashTag>*/}
                         </ContentMent>

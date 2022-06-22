@@ -5,7 +5,9 @@ import styled from "styled-components";
 import { search } from "./temp/config";
 import mixIn from "../screens/temp/Minxin";
 
-const Container = styled.View``;
+const Container = styled.View`
+  top: -5px;
+`;
 
 const SearchBarWrap = styled.View`
   position: relative;
@@ -29,15 +31,15 @@ const SearchIcon = styled.Image`
 `;
 
 const SearchBar = Animatable.createAnimatableComponent(styled.TextInput`
-  width: ${({ touch }) => (touch.length > 0 ? "85%" : "95%")};
-  height: 50px;
+  width: ${({ touch }) => (touch.length > 0 ? "90%" : "95%")};
+  height: 40px;
   left: 30px;
   border-radius: 10px;
 `);
 
 const ResultContainer = styled.View`
   height: 100%;
-  background-color: white
+  background-color: transparent
 `;
 
 const ResultLabel = styled.Text`
@@ -61,10 +63,10 @@ const ResultItem = styled.Text`
 
 const typed = {
     0: {
-        width: "95%",
+        width: "100%",
     },
     1: {
-        width: "85%",
+        width: "88%",
     },
 };
 
