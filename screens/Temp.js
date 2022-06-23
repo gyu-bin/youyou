@@ -13,7 +13,7 @@ const SearchBarWrap = styled.View`
   position: relative;
   ${mixIn.flex("row", "flex-start", "center")};
   width: 100%;
-  background-color: lightgrey;
+  background-color: white;
   border-radius: 10px;
 `;
 
@@ -87,8 +87,8 @@ export default function Temp({ navigation }) {
     const searchData = async (text) => {
         try {
             setSearchVal(text);
-            const res = await fetch(`http://3.39.190.23:8080/api/feeds/1/search`, {
-                method: "POST",
+            const res = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&key=AIzaSyD0fcEOaCavJo_udjes29TWSn6PTpbFlDM`, {
+                method: "GET",
                 body: JSON.stringify({
                     keyword: text,
                 }),

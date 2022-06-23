@@ -62,6 +62,7 @@ export default function IntroduceGroup(){
     const [data,setData]=useState();
     const Stack = createNativeStackNavigator();
     const onChangeSearch = query => setSearchQuery(query);
+    const [searchVal, setSearchVal] = useState("");
 
     const getApi=async ()=>{
         try{
@@ -112,12 +113,24 @@ export default function IntroduceGroup(){
         setRefreshing(false);
     };
 
+    const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
+        const paddingToBottom = 0
+        return (
+            layoutMeasurement.height + contentOffset.y >=
+            contentSize.height - paddingToBottom
+        )
+    }
+
     return (
         <Container>
             <StatusBar style="auto"/>
-            <View>
+            <ScrollView >
                 {loading ? <ActivityIndicator/> : (
-                    <View>
+                    <ScrollView onScrollEndDrag={({nativeEvent})=>{
+                        if (isCloseToBottom(nativeEvent)) {
+                            { getApi() }
+                        }
+                    }}>
                         <FlatList
                             refreshing={refreshing}
                             onRefresh={onRefresh}
@@ -134,9 +147,9 @@ export default function IntroduceGroup(){
                                 </View>
                             )}
                         />
-                    </View>
+                    </ScrollView>
                 )}
-            </View>
+            </ScrollView>
         </Container>
     )
 }

@@ -17,7 +17,6 @@ import * as Animatable from 'react-native-animatable'
 import IntroduceGroup from '../screens/SearchPage/IntroduceGroup'
 import Peed from '../screens/SearchPage/Peed'
 import PeedSelectPage from "./SearchPage/PeedSelectPage";
-
 const NativeStack = createNativeStackNavigator();
 const TopTab = createMaterialTopTabNavigator();
 import styled from "styled-components";

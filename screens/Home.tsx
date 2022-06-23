@@ -19,7 +19,7 @@ import {
     Share,
     Platform,
     StyleSheet,
-    Animated, Easing, ImageBackground
+    Animated, Easing, ImageBackground,
 } from 'react-native';
 import styled from "styled-components/native";
 import Swiper from "react-native-swiper";
@@ -28,6 +28,7 @@ import axios from "axios";
 import Icon from "react-native-vector-icons/Ionicons";
 import {Ionicons} from "@expo/vector-icons";
 import  MentionHashtagTextView  from  "react-native-mention-hashtag-text";
+
 
 interface ValueInfo{
     str: string;
@@ -278,7 +279,6 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
     };
     let timestring = `${time.year}/${time.month}/${time.date} ${time.hours}:${time.minutes}`;
 
-
     const getApi=async ()=>{
         try{
             setLoading(true);
@@ -294,9 +294,14 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
         }
     }
 
+
     useEffect(()=>{
         getApi();
     },[]);
+
+    const onEndReached = () => {
+        getApi();
+    };
 
     //heart선택
     const [heartSelected, setHeartSelected] = useState<boolean>(false);
@@ -349,7 +354,7 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
             "30일이 지나면 영구 삭제 됩니다. ",
             [
                 {
-                    text: "아니요",
+                    text: "아니요1",
                     onPress: () => console.log(""),
                     style: "cancel"
                 },
@@ -362,7 +367,7 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
 
     const getHome = () => {
         const result = [];
-        for (let i = 0; i < 5; ++i) {
+        for (let i = 0; i < 20; ++i) {
             result.push({
                 id: i,
                 img:
@@ -453,26 +458,55 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
     };
 
 
+    const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
+        const paddingToBottom = 34
+        return (
+            layoutMeasurement.height + contentOffset.y >=
+            contentSize.height - paddingToBottom
+        )
+    }
+
+    const renderItem=({item})=>(
+        <View style={{flexDirection: 'row'}}>
+            <MentionHashtagTextView
+                mentionHashtagPress={mentionHashtagClick}
+                mentionHashtagColor={"#63ABFF"}
+                key={data}
+            >
+                {item.content}
+            </MentionHashtagTextView>
+        </View>
+    )
+
     return (
         <Container>
-            <Wrapper>
-                <MainLogo>
-                    {/*<Image style={styles.logo} source={logo}/>*/}
-                    <Text style={{
-                        color:'black',
-                        fontSize: 35,
-                        fontWeight: "bold",
-                    }}>OnYou</Text>
-                </MainLogo>
-                <FlatList refreshing={refreshing} onRefresh={onRefresh} keyExtractor={(item, index) => index + ""} data={Home} renderItem={()=>(
-                    <MainArea>
-                        <HeaderStyle>
-                            <HeaderText>
-                                <MainText>
-                                    <UserImage source={{uri: 'https://i.pinimg.com/564x/9e/d8/4c/9ed84cf3fc04d0011ec4f75c0692c83e.jpg'}}/>
-                                    <View>
-                                        <UserId>이진규
-                                            {/*<FlatList
+                <Wrapper>
+                    <MainLogo>
+                        {/*<Image style={styles.logo} source={logo}/>*/}
+                        <Text style={{
+                            color:'black',
+                            fontSize: 35,
+                            fontWeight: "bold",
+                        }}>OnYou</Text>
+                    </MainLogo>
+                    <ScrollView>
+                        <FlatList
+                            refreshing={refreshing}
+                                  onRefresh={onRefresh}
+                                  initialNumToRender={2}
+                                  maxToRenderPerBatch={2}
+                                    windowSize={2}
+                                  onEndReached={onEndReached}
+                                  onEndReachedThreshold={0}
+                                  keyExtractor={(item, index) => index + ""} data={data} renderItem={()=>(
+                            <MainArea>
+                                <HeaderStyle>
+                                    <HeaderText>
+                                        <MainText>
+                                            <UserImage source={{uri: 'https://i.pinimg.com/564x/9e/d8/4c/9ed84cf3fc04d0011ec4f75c0692c83e.jpg'}}/>
+                                            <View>
+                                                <UserId>이진규
+                                                    {/*<FlatList
                                             refreshing={refreshing}
                                             onRefresh={onRefresh}
                                             data={data}
@@ -483,145 +517,132 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
                                                 </>
                                             )}
                                         />*/}
-                                        </UserId>
-                                        <CtrgArea>
-                                            <CtgrText onPress={goToReply}>
-                                                <Text>
-                                                    온유프로젝트
-                                                </Text></CtgrText>
-                                        </CtrgArea>
-                                    </View>
-                                </MainText>
-                                <ModalArea>
-                                    <TouchableOpacity onPress={toggleModal} style={{top: 10, left: 220 }}>
-                                        <Icon name="ellipsis-vertical" size={30} style={{
-                                            color: 'black',
-                                        }}/>
-                                        {/*<View onPress={toggleModal}>
+                                                </UserId>
+                                                <CtrgArea>
+                                                    <CtgrText onPress={goToReply}>
+                                                        <Text>
+                                                            온유프로젝트
+                                                        </Text></CtgrText>
+                                                </CtrgArea>
+                                            </View>
+                                        </MainText>
+                                        <ModalArea>
+                                            <TouchableOpacity onPress={toggleModal} style={{top: 10, left: 220 }}>
+                                                <Icon name="ellipsis-vertical" size={30} style={{
+                                                    color: 'black',
+                                                }}/>
+                                                {/*<View onPress={toggleModal}>
                                             </View>*/}
-                                    </TouchableOpacity>
-                                    <View>
-                                        <Modal
-                                            animationType="slide"
-                                            transparent={true}
-                                            visible={isModalVisible}
+                                            </TouchableOpacity>
+                                            <View>
+                                                <Modal
+                                                    animationType="slide"
+                                                    transparent={true}
+                                                    visible={isModalVisible}
+                                                >
+                                                    <CenteredView onTouchEnd={closeModal}>
+                                                        <ModalView>
+                                                            <ModalText onPress={goToModifiy}>수정</ModalText>
+                                                            <ModalText onPress={deleteCheck}>삭제</ModalText>
+                                                            <ModalText onPress={goToAccusation}>신고</ModalText>
+                                                            <ModalText onPress={closeModal}>Close</ModalText>
+                                                        </ModalView>
+                                                    </CenteredView>
+                                                </Modal>
+                                            </View>
+                                        </ModalArea>
+                                    </HeaderText>
+                                    <>
+                                        <Swiper
+                                            horizontal
+                                            containerStyle={{
+                                                width: "100%",
+                                                top: -5,
+
+                                            }}
                                         >
-                                            <CenteredView onTouchEnd={closeModal}>
-                                                <ModalView>
-                                                    <ModalText onPress={goToModifiy}>수정</ModalText>
-                                                    <ModalText onPress={deleteCheck}>삭제</ModalText>
-                                                    <ModalText onPress={goToAccusation}>신고</ModalText>
-                                                    <ModalText onPress={closeModal}>Close</ModalText>
-                                                </ModalView>
-                                            </CenteredView>
-                                        </Modal>
-                                    </View>
-                                </ModalArea>
-                            </HeaderText>
-                            <>
-                                <Swiper
-                                    horizontal
-                                    containerStyle={{
-                                        width: "100%",
-                                        top: -5,
-
-                                    }}
-                                >
-                                    {mainImg.map((bundle, index) => {
-                                        return (
-                                            <ImgView key={index}>
-                                                {bundle.map((item, index) => {
-                                                    return (
-                                                        <ImgItem key={index}>
-                                                            <SliderBox  images={[
-                                                                "https://i.pinimg.com/736x/69/01/fa/6901fa625a250d1a0bf42dd97b941d86.jpg",
-                                                                "https://i.pinimg.com/564x/e8/7f/50/e87f50bb77134487ce107966f7fc26a9.jpg",
-                                                                "https://i.pinimg.com/564x/23/58/ec/2358ec9140ebe494df99beedf70c6c33.jpg",
-                                                                "https://i.pinimg.com/564x/0f/6a/13/0f6a13baac82b80f5b1a1d4d9e20e479.jpg",
-                                                                "https://i.pinimg.com/originals/69/96/53/69965364cb740c83facb682de198f303.gif"
-                                                            ]}
-                                                                        sliderBoxHeight={350}
-                                                                        sliderBoxWidth={390}
-                                                            />
-                                                        </ImgItem>
-                                                    );
-                                                })}
-                                            </ImgView>
-                                        );
-                                    })}
-                                </Swiper>
-                            </>
-                        </HeaderStyle>
-                        <TextArea>
-                            <LikeMent>
-                                <LikeArea>
-                                    <TouchableOpacity onPress={() => setHeartSelected(!heartSelected)}>
-                                        {heartSelected ? (
-                                            <Ionicons name="md-heart" size={24} color="red" />
-                                        ) : (
-                                            <Ionicons name="md-heart-outline" size={24} color="red" />
+                                            {mainImg.map((bundle, index) => {
+                                                return (
+                                                    <ImgView key={index}>
+                                                        {bundle.map((item, index) => {
+                                                            return (
+                                                                <ImgItem key={index}>
+                                                                    <SliderBox  images={[
+                                                                        "https://i.pinimg.com/736x/69/01/fa/6901fa625a250d1a0bf42dd97b941d86.jpg",
+                                                                        "https://i.pinimg.com/564x/e8/7f/50/e87f50bb77134487ce107966f7fc26a9.jpg",
+                                                                        "https://i.pinimg.com/564x/23/58/ec/2358ec9140ebe494df99beedf70c6c33.jpg",
+                                                                        "https://i.pinimg.com/564x/0f/6a/13/0f6a13baac82b80f5b1a1d4d9e20e479.jpg",
+                                                                        "https://i.pinimg.com/originals/69/96/53/69965364cb740c83facb682de198f303.gif"
+                                                                    ]}
+                                                                                sliderBoxHeight={350}
+                                                                                sliderBoxWidth={390}
+                                                                    />
+                                                                </ImgItem>
+                                                            );
+                                                        })}
+                                                    </ImgView>
+                                                );
+                                            })}
+                                        </Swiper>
+                                    </>
+                                </HeaderStyle>
+                                <TextArea>
+                                    <LikeMent>
+                                        <LikeArea>
+                                            <TouchableOpacity onPress={() => setHeartSelected(!heartSelected)}>
+                                                {heartSelected ? (
+                                                    <Ionicons name="md-heart" size={24} color="red" />
+                                                ) : (
+                                                    <Ionicons name="md-heart-outline" size={24} color="red" />
+                                                )}
+                                            </TouchableOpacity>
+                                            <BoldText2>{number}</BoldText2>
+                                        </LikeArea>
+                                        <ReplyArea>
+                                            <TouchableOpacity onPress={goToReply}>
+                                                <Icon name="md-chatbox-ellipses-outline" size={25} color='black'
+                                                      style={{ top: 2, left:5}}
+                                                />
+                                            </TouchableOpacity>
+                                            <Text style={{left: 5, fontWeight: 'normal', top: 5}}>{rand(1,100)}</Text>
+                                        </ReplyArea>
+                                        <TouchableOpacity onPress={()=>onShare()}>
+                                            <Icon name="md-share-outline" size={30} style={{
+                                                marginLeft: 11,
+                                                color: 'black',
+                                                top: 2
+                                            }}/>
+                                        </TouchableOpacity>
+                                        <DataArea>
+                                            <Text style={{color: 'grey', left: 150}}>
+                                                {timestring}
+                                            </Text>
+                                        </DataArea>
+                                    </LikeMent>
+                                </TextArea>
+                                <ContentMent>
+                                    <View style={{ flex: 1, padding: 10, width: 2000 }}>
+                                        {loading ? <ActivityIndicator/> : (
+                                            <View>
+                                                <FlatList
+                                                    refreshing={refreshing}
+                                                    onRefresh={onRefresh}
+                                                    data={data}
+                                                    keyExtractor={(item, index) => index + ""}
+                                                     renderItem={renderItem}
+                                                />
+                                            </View>
                                         )}
-                                    </TouchableOpacity>
-                                    <BoldText2>{number}</BoldText2>
-                                </LikeArea>
-                                <ReplyArea>
-                                    <TouchableOpacity onPress={goToReply}>
-                                        <Icon name="md-chatbox-ellipses-outline" size={25} color='black'
-                                              style={{ top: 2, left:5}}
-                                        />
-                                    </TouchableOpacity>
-                                    <Text style={{left: 5, fontWeight: 'normal', top: 5}}>{rand(1,100)}</Text>
-                                </ReplyArea>
-                                <TouchableOpacity onPress={()=>onShare()}>
-                                    <Icon name="md-share-outline" size={30} style={{
-                                        marginLeft: 11,
-                                        color: 'black',
-                                        top: 2
-                                    }}/>
-                                </TouchableOpacity>
-                                <DataArea>
-                                    <Text style={{color: 'grey', left: 150}}>
-                                        {timestring}
-                                    </Text>
-                                </DataArea>
-                            </LikeMent>
-                        </TextArea>
-                        <ContentMent>
-                            <View style={{ flex: 1, padding: 10, width: 2000 }}>
-                                {loading ? <ActivityIndicator/> : (
-                                    <View>
-                                        <FlatList
-                                            refreshing={refreshing}
-                                            onRefresh={onRefresh}
-                                            data={data}
-                                            keyExtractor={(item, index) => index + ""}
-                                            renderItem={({ item }) => (
-                                                <View style={{flexDirection: 'row'}}>
-                                                    <MentionHashtagTextView
-                                                        mentionHashtagPress={mentionHashtagClick}
-                                                        mentionHashtagColor={"#63ABFF"}
-                                                    >
-                                                        {item.content}
-                                                    </MentionHashtagTextView>
-                                                    {/*<Ment text={text} numberOfLines={3} ellipsizeMode={"tail"}>{item.content}</Ment>*/}
-                                                </View>
-                                            )}
-                                        />
                                     </View>
-                                )}
-                            </View>
-                            {/*  <MentId>유주은</MentId>
-                            <Ment> 디자인 이쁘다</Ment>
-                            <HashTag>#잘 뽑혔구먼</HashTag>*/}
-                        </ContentMent>
-                    </MainArea>
-                )}></FlatList>
-                <FloatingButton onPress={goToContent}>
-                    <Ionicons name="ios-add-sharp" size={28} color="black"
-
-                    />
-                </FloatingButton>
-            </Wrapper>
+                                </ContentMent>
+                            </MainArea>
+                        )}></FlatList>
+                    </ScrollView>
+                    <FloatingButton onPress={goToContent}>
+                        <Ionicons name="ios-add-sharp" size={28} color="black"
+                        />
+                    </FloatingButton>
+                </Wrapper>
         </Container>
     )
 }
