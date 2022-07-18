@@ -8,6 +8,7 @@ import ModifiyPeed from "../screens/HomeRelevant/ModifiyPeed";
 import ImageSelecter from '../screens/HomeRelevant/ImageSelecter'
 import ReportComplete from '../screens/HomeRelevant/ReportComplete'
 import ReplyPage from '../screens/HomeRelevant/ReplyPage'
+import AlarmPage from "../screens/HomeRelevant/AlarmPage";
 import {Text, TouchableOpacity} from "react-native";
 import {Ionicons} from "@expo/vector-icons";
 
@@ -117,7 +118,21 @@ const HomeStack = ({ navigation: { navigate } }) => {
                     headerShown:true
                 }}
             />
-
+            <NativeStack.Screen
+                name="AlarmPage"
+                component={AlarmPage}
+                options={{
+                    title: "알람",
+                    headerLeft: () => (
+                        <TouchableOpacity
+                            onPress={() => navigate("Tabs", { screen: "Home" })}
+                        >
+                            <Ionicons name="chevron-back" size={20} color="black" />
+                        </TouchableOpacity>
+                    ),
+                    headerShown:true
+                }}
+            />
             <NativeStack.Screen
                 name="ReportComplete"
                 component={ReportComplete}
