@@ -38,8 +38,19 @@ const Container = styled.SafeAreaView`
   position: relative;
   flex-direction: column;
   height: 100%;
+  top: 5%;
 `;
 
+const LogoImage=styled.Image`
+  width: 35px;
+  height: 35px;
+  border-radius: 100px;
+  top: 3%;
+`
+const AlamrIcon=styled.View`
+  left: 162px;
+  top: 12px;
+`
 const Loader = styled.View`
   flex: 1;
   justify-content: center;
@@ -48,12 +59,11 @@ const Loader = styled.View`
 
 const MainArea=styled.View`
   justify-content: space-between;
+  margin-bottom: 5%;
 `
 
-const MainLogo=styled.Text`
+const MainLogo=styled.View`
   flex-direction: row;
-  justify-content: space-between;
-  background-color: white;
   display: flex;
   height: 50px;
   left: 10px;
@@ -120,16 +130,15 @@ const ImagePrint=styled.Image`
 const TextArea=styled.View`
   background-color: white;
   flex-direction: row;
-  top: -5px;
   width: 100%;
 `
-
 
 const LikeMent=styled.Text`
   flex-direction: row;
   color: black;
   margin-left: 10px;
   width: 100%;
+  margin-top: 5px;
 `
 
 const LikeArea=styled.View`
@@ -147,11 +156,13 @@ const BoldText1=styled.TouchableOpacity`
 const BoldText2=styled.Text`
   font-weight: normal;
   top: 5px;
+  font-size: 9px;
 `
 const ContentMent=styled.View`
   background-color: white;
   flex-direction: row;
   left: 10px;
+  top: 2%;
 `
 const MentId=styled.Text`
   color: black;
@@ -233,7 +244,6 @@ const FloatingButton = styled.TouchableOpacity`
   background-color: white;
   color: black;
   box-shadow: 1px 1px 3px gray;
-  border: black solid 1px;
   border-radius: 10px;
   justify-content: center;
   align-items: center;
@@ -274,7 +284,7 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
         hours: today.getHours(), //현재 시간
         minutes: today.getMinutes(), //현재 분
     };
-    let timestring = `${time.year}/${time.month}/${time.date} ${time.hours}:${time.minutes}`;
+    let timestring = `${time.year}년 ${time.month}월 ${time.date}일`;
 
 
     const getApi=async ()=>{
@@ -328,6 +338,11 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
         setModalVisible(!isModalVisible);
     }
 
+    const goToAlarm=()=>{
+        navigate("HomeStack",{
+            screen:"AlarmPage"
+        })
+    }
 
     const goToAccusation=()=>{
         navigate("HomeStack",{
@@ -360,7 +375,7 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
 
     const getHome = () => {
         const result = [];
-        for (let i = 0; i < 5; ++i) {
+        for (let i = 0; i < 2; ++i) {
             result.push({
                 id: i,
                 img:
@@ -455,12 +470,16 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
         <Container>
             <Wrapper>
                 <MainLogo>
-                    {/*<Image style={styles.logo} source={logo}/>*/}
+                    <LogoImage source={{uri: 'https://i.pinimg.com/564x/cd/c9/a5/cdc9a5ffec176461e7a1503d3b2553d4.jpg'}}/>
                     <Text style={{
                         color:'black',
                         fontSize: 35,
                         fontWeight: "bold",
+                        left: 10
                     }}>OnYou</Text>
+                    <AlamrIcon>
+                        <Icon name="md-notifications-outline" onPress={goToAlarm} size={28} color="black" />
+                    </AlamrIcon>
                 </MainLogo>
                 <FlatList refreshing={refreshing} onRefresh={onRefresh} keyExtractor={(item, index) => index + ""} data={Home} renderItem={()=>(
                     <MainArea>
@@ -491,7 +510,7 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
                                     </View>
                                 </MainText>
                                 <ModalArea>
-                                    <TouchableOpacity onPress={toggleModal} style={{top: 10, left: 220 }}>
+                                    <TouchableOpacity onPress={toggleModal} style={{top: 10, left: 210 }}>
                                         <Icon name="ellipsis-vertical" size={30} style={{
                                             color: 'black',
                                         }}/>
@@ -520,9 +539,9 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
                                 <Swiper
                                     horizontal
                                     containerStyle={{
-                                        width: "100%",
-                                        top: -5,
-
+                                        marginLeft: 20,
+                                        marginRight: 20,
+                                        top: 5
                                     }}
                                 >
                                     {mainImg.map((bundle, index) => {
@@ -538,8 +557,8 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
                                                                 "https://i.pinimg.com/564x/0f/6a/13/0f6a13baac82b80f5b1a1d4d9e20e479.jpg",
                                                                 "https://i.pinimg.com/originals/69/96/53/69965364cb740c83facb682de198f303.gif"
                                                             ]}
-                                                                        sliderBoxHeight={350}
-                                                                        sliderBoxWidth={390}
+                                                                        sliderBoxHeight={335}
+                                                                        sliderBoxWidth={395}
                                                             />
                                                         </ImgItem>
                                                     );
@@ -557,28 +576,28 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
                                         {heartSelected ? (
                                             <Ionicons name="md-heart" size={24} color="red" />
                                         ) : (
-                                            <Ionicons name="md-heart-outline" size={24} color="red" />
+                                            <Ionicons name="md-heart-outline" size={20} color="red" />
                                         )}
                                     </TouchableOpacity>
                                     <BoldText2>{number}</BoldText2>
                                 </LikeArea>
                                 <ReplyArea>
                                     <TouchableOpacity onPress={goToReply}>
-                                        <Icon name="md-chatbox-ellipses-outline" size={25} color='black'
+                                        <Icon name="md-chatbox-ellipses-outline" size={20} color='black'
                                               style={{ top: 2, left:5}}
                                         />
                                     </TouchableOpacity>
-                                    <Text style={{left: 5, fontWeight: 'normal', top: 5}}>{rand(1,100)}</Text>
+                                    <Text style={{left: 5, fontWeight: 'normal', top: 5, fontSize: 9}}>{rand(1,100)}</Text>
                                 </ReplyArea>
                                 <TouchableOpacity onPress={()=>onShare()}>
-                                    <Icon name="md-share-outline" size={30} style={{
+                                    <Icon name="md-share-outline" size={20} style={{
                                         marginLeft: 11,
                                         color: 'black',
                                         top: 2
                                     }}/>
                                 </TouchableOpacity>
                                 <DataArea>
-                                    <Text style={{color: 'grey', left: 150}}>
+                                    <Text style={{color: 'grey', left: 170}}>
                                         {timestring}
                                     </Text>
                                 </DataArea>
@@ -609,16 +628,15 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
                                     </View>
                                 )}
                             </View>*/}
-                              <MentId>유주은</MentId>
+                              {/*<MentId>유주은</MentId>*/}
                             <Ment> 디자인 이쁘다</Ment>
-                            <HashTag>#잘 뽑혔구먼</HashTag>
+                            <HashTag onPress={mentionHashtagClick}>#잘 뽑혔구먼</HashTag>
                         </ContentMent>
                     </MainArea>
-                )}></FlatList>
+                )}>
+                </FlatList>
                 <FloatingButton onPress={goToContent}>
-                    <Ionicons name="ios-add-sharp" size={28} color="black"
-
-                    />
+                    <Icon name="md-image-outline" size={28} color="black"/>
                 </FloatingButton>
             </Wrapper>
         </Container>

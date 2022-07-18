@@ -175,9 +175,10 @@ const ReplyPage:React.FC<NativeStackScreenProps<any, "ReplyPage">> = ({
         try{
             setLoading(true);
             const response= await axios.get(
-                `http://3.39.190.23:8080/api/feeds/1`
+                // `http://3.39.190.23:8080/api/feeds/1`
+                `http://3.39.190.23:8080/api/clubs`
             )
-            setData(response.data.data.comment)
+            setData(response.data.data.values)
             console.log(data)
         } catch (error) {
             console.error(error);
@@ -223,12 +224,12 @@ const ReplyPage:React.FC<NativeStackScreenProps<any, "ReplyPage">> = ({
                                     <View>
                                         <CommentMent>
                                             <CommentImg source={{uri: 'https://i.pinimg.com/564x/13/05/7c/13057c33d7ad3f50ea99bc44b388ebcb.jpg'}}/>
-                                            <CommentId>{item.userName}</CommentId>
-                                            <Comment>{item.content}</Comment>
+                                            <CommentId>{item.name}</CommentId>
+                                            <Comment>{item.organizationName}</Comment>
                                         </CommentMent>
                                         <CommentRemainder>
                                             {/*<Time>{rand(1,60)}분</Time>*/}
-                                            <Time>{item.created}</Time>
+                                            <Time>{item.creatorName}</Time>
                                             <Like>좋아요 {rand(1,100)} 개</Like>
                                             <TouchableOpacity onPress={() => setHeartSelected(!heartSelected)}>
                                                 {heartSelected ? (

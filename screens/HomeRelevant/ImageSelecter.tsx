@@ -131,6 +131,13 @@ const PickedImage = styled.Image<{ height: number }>`
 `;
 
 const ImageSelecter: React.FC<ImageSelecterProps> = ({
+    route:{
+        params:{
+            clubId ,
+            content ,
+            imageUri ,
+        },
+    },
     navigation: { navigate },
     }) => {
     const [image, setImage] = useState<string | null>(null);
