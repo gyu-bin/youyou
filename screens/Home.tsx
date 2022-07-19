@@ -48,7 +48,7 @@ const LogoImage=styled.Image`
   top: 3%;
 `
 const AlamrIcon=styled.View`
-  left: 162px;
+  left: 152px;
   top: 12px;
 `
 const Loader = styled.View`
@@ -66,7 +66,8 @@ const MainLogo=styled.View`
   flex-direction: row;
   display: flex;
   height: 50px;
-  left: 10px;
+  left: 20px;
+  background-color: white;
 `
 const PlusFeed=styled.Button`
   color: white;
@@ -80,12 +81,12 @@ const HeaderStyle=styled.View`
 `
 const HeaderText=styled.View`
   flex-direction: row;
-  left: 10px;
 `
 
 const MainText=styled.View`
   flex-direction: row;
   height: 60px;
+  margin: 0 20px 0 20px;
 `
 
 const UserImage=styled.Image`
@@ -108,7 +109,11 @@ const CtrgArea=styled.View`
 `
 const CtgrText= styled.TouchableOpacity`
   margin: 3px 5px 3px 5px;
+`
+
+const ProjectNm=styled.Text`
   color: white;
+  font-size: 10px;
 `
 
 //ModalStyle
@@ -131,6 +136,7 @@ const TextArea=styled.View`
   background-color: white;
   flex-direction: row;
   width: 100%;
+  margin-left: 10px;
 `
 
 const LikeMent=styled.Text`
@@ -139,6 +145,7 @@ const LikeMent=styled.Text`
   margin-left: 10px;
   width: 100%;
   margin-top: 5px;
+  justify-content: space-around;
 `
 
 const LikeArea=styled.View`
@@ -149,14 +156,19 @@ const ReplyArea=styled.View`
 `
 const DataArea=styled.View`
 `
+const DataText=styled.Text`
+  color: grey;
+  font-size: 10px;
+  left: 205px;
 
+`
 const BoldText1=styled.TouchableOpacity`
   font-weight: bold;
 `
 const BoldText2=styled.Text`
   font-weight: normal;
-  top: 5px;
-  font-size: 9px;
+  top: 3%;
+  font-size: 13px;
 `
 const ContentMent=styled.View`
   background-color: white;
@@ -173,6 +185,7 @@ const MentId=styled.Text`
 const Ment = styled.Text`
   color: black;
   margin-left: 2%;
+  width: 90%;
 `
 
 const HashTag=styled.Text`
@@ -191,8 +204,13 @@ const OptionArea = styled.View`
 //ModalStyle
 
 const ModalArea = styled.View`
+  width: 95%;
 `
 
+const ModalIcon=styled.TouchableOpacity`
+  top: 20px;
+  left: 190px;
+`
 const CenteredView=styled.View`
   flex: 1;
   justify-content: flex-end;
@@ -474,7 +492,7 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
                     <Text style={{
                         color:'black',
                         fontSize: 35,
-                        fontWeight: "bold",
+                        fontWeight: '500',
                         left: 10
                     }}>OnYou</Text>
                     <AlamrIcon>
@@ -503,20 +521,20 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
                                         </UserId>
                                         <CtrgArea>
                                             <CtgrText onPress={goToReply}>
-                                                <Text>
+                                                <ProjectNm>
                                                     온유프로젝트
-                                                </Text></CtgrText>
+                                                </ProjectNm></CtgrText>
                                         </CtrgArea>
                                     </View>
                                 </MainText>
                                 <ModalArea>
-                                    <TouchableOpacity onPress={toggleModal} style={{top: 10, left: 210 }}>
-                                        <Icon name="ellipsis-vertical" size={30} style={{
+                                    <ModalIcon onPress={toggleModal} >
+                                        <Icon name="ellipsis-vertical" size={20} style={{
                                             color: 'black',
                                         }}/>
                                         {/*<View onPress={toggleModal}>
                                             </View>*/}
-                                    </TouchableOpacity>
+                                    </ModalIcon>
                                     <View>
                                         <Modal
                                             animationType="slide"
@@ -541,7 +559,7 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
                                     containerStyle={{
                                         marginLeft: 20,
                                         marginRight: 20,
-                                        top: 5
+                                        top: -4
                                     }}
                                 >
                                     {mainImg.map((bundle, index) => {
@@ -558,7 +576,7 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
                                                                 "https://i.pinimg.com/originals/69/96/53/69965364cb740c83facb682de198f303.gif"
                                                             ]}
                                                                         sliderBoxHeight={335}
-                                                                        sliderBoxWidth={395}
+                                                                        sliderBoxWidth={335}
                                                             />
                                                         </ImgItem>
                                                     );
@@ -571,35 +589,30 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
                         </HeaderStyle>
                         <TextArea>
                             <LikeMent>
-                                <LikeArea>
-                                    <TouchableOpacity onPress={() => setHeartSelected(!heartSelected)}>
-                                        {heartSelected ? (
-                                            <Ionicons name="md-heart" size={24} color="red" />
-                                        ) : (
-                                            <Ionicons name="md-heart-outline" size={20} color="red" />
-                                        )}
-                                    </TouchableOpacity>
-                                    <BoldText2>{number}</BoldText2>
-                                </LikeArea>
-                                <ReplyArea>
-                                    <TouchableOpacity onPress={goToReply}>
-                                        <Icon name="md-chatbox-ellipses-outline" size={20} color='black'
-                                              style={{ top: 2, left:5}}
-                                        />
-                                    </TouchableOpacity>
-                                    <Text style={{left: 5, fontWeight: 'normal', top: 5, fontSize: 9}}>{rand(1,100)}</Text>
-                                </ReplyArea>
-                                <TouchableOpacity onPress={()=>onShare()}>
-                                    <Icon name="md-share-outline" size={20} style={{
-                                        marginLeft: 11,
-                                        color: 'black',
-                                        top: 2
-                                    }}/>
-                                </TouchableOpacity>
+                                <View style={{display: 'flex', flexDirection: 'row'}}>
+                                    <LikeArea>
+                                        <TouchableOpacity onPress={() => setHeartSelected(!heartSelected)}>
+                                            {heartSelected ? (
+                                                <Ionicons name="md-heart" size={20} color="red" />
+                                            ) : (
+                                                <Ionicons name="md-heart-outline" size={20} color="red" />
+                                            )}
+                                        </TouchableOpacity>
+                                        <BoldText2>{number}</BoldText2>
+                                    </LikeArea>
+                                    <ReplyArea>
+                                        <TouchableOpacity onPress={goToReply}>
+                                            <Icon name="md-chatbox-ellipses-outline" size={20} color='black'
+                                                  style={{left: 4}}
+                                            />
+                                        </TouchableOpacity>
+                                        <Text style={{left: 5, fontWeight: 'normal', fontSize: 13}}>{rand(1,100)}</Text>
+                                    </ReplyArea>
+                                </View>
                                 <DataArea>
-                                    <Text style={{color: 'grey', left: 170}}>
+                                    <DataText>
                                         {timestring}
-                                    </Text>
+                                    </DataText>
                                 </DataArea>
                             </LikeMent>
                         </TextArea>
@@ -628,9 +641,13 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
                                     </View>
                                 )}
                             </View>*/}
-                              {/*<MentId>유주은</MentId>*/}
-                            <Ment> 디자인 이쁘다</Ment>
-                            <HashTag onPress={mentionHashtagClick}>#잘 뽑혔구먼</HashTag>
+                            {/*<MentId>유주은</MentId>*/}
+                            <Ment>디자인 이쁘다.
+                                <HashTag onPress={mentionHashtagClick}>#잘 뽑혔구먼 </HashTag>
+                                디자인 이쁘다.
+                                <HashTag onPress={mentionHashtagClick}>#배고프다.</HashTag>
+                                디자인 이쁘다.
+                            </Ment>
                         </ContentMent>
                     </MainArea>
                 )}>

@@ -42,7 +42,7 @@ export default function AlarmPage(){
                 <View>
                     <AlarmText><Text style={{fontWeight: 'bold'}}>김재광</Text>님의
                         <Text style={{fontWeight: 'bold'}}>온유프로젝트</Text> 가입 요청이
-                        <Text style={{fontWeight: 'bold'}}>수락</Text>되었습니다.</AlarmText>
+                        수락되었습니다.</AlarmText>
                 </View>
             </AlarmArea>
             <AlarmArea>
@@ -53,7 +53,7 @@ export default function AlarmPage(){
                 <View>
                     <AlarmText><Text style={{fontWeight: 'bold'}}>김재광</Text>님의
                         <Text style={{fontWeight: 'bold'}}>온유프로젝트</Text> 가입 요청이
-                        <Text style={{fontWeight: 'bold'}}>거절</Text>되었습니다.</AlarmText>
+                        거절되었습니다.</AlarmText>
                 </View>
             </AlarmArea>
         </Container>

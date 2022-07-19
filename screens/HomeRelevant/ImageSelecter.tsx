@@ -15,7 +15,7 @@ import styled from "styled-components/native";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import SelectDropdown from "react-native-select-dropdown";
 import axios from "axios";
-import {ClubApi, ClubCreationRequest, FeedCreateRequest, feedCreateRequest, HomeApi} from "../../api";
+import {ClubApi, ClubCreationRequest, FeedCreateRequest, HomeApi} from "../../api";
 import {ImageSelecterProps} from "../../types/home";
 import {useMutation} from "react-query";
 
@@ -131,13 +131,13 @@ const PickedImage = styled.Image<{ height: number }>`
 `;
 
 const ImageSelecter: React.FC<ImageSelecterProps> = ({
-    route:{
+   /* route:{
         params:{
-            clubId ,
+            clubId,
             content ,
             imageUri ,
         },
-    },
+    },*/
     navigation: { navigate },
     }) => {
     const [image, setImage] = useState<string | null>(null);
@@ -251,15 +251,15 @@ const ImageSelecter: React.FC<ImageSelecterProps> = ({
         },
     });
 
-    const onSubmit = () => {
-        console.log("clubId1: " + clubId);
+    /*const onSubmit = () => {
+      /!*  console.log("clubId1: " + clubId);
         console.log("content: " + content);
-        console.log("imageUrl: " + imageUri);
+        console.log("imageUrl: " + imageUri);*!/
 
         const data = {
-            clubId: clubId,
-            content: content,
-            imageUri: imageUri
+            clubId,
+            content,
+            imageUri
         };
 
         const splitedURI = new String(imageUri).split("/");
@@ -281,10 +281,8 @@ const ImageSelecter: React.FC<ImageSelecterProps> = ({
 
         mutation.mutate(requestData);
 
-        // 결과값 받아서 한번 더 화면 분기할 것.
-
         return navigate("Tabs", { screen: "Home" });
-    };
+    };*/
 
     const createPeed = async () => {
         try {
@@ -478,7 +476,7 @@ const ImageSelecter: React.FC<ImageSelecterProps> = ({
                                     createFinish();
                                 }}
                             >
-                                <ButtonText onPress={onSubmit}>공유하기</ButtonText>
+                                <ButtonText onPress={createPeed}>공유하기</ButtonText>
                             </NextButton>
                         </ButtonArea>
                     </AllBtn>
