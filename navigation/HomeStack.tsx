@@ -70,7 +70,7 @@ const HomeStack = ({ navigation: { navigate } }) => {
                 name="ReplyPage"
                 component={ReplyPage}
                 options={{
-                    title: "새 게시물",
+                    title: "댓글",
                     headerLeft: () => (
                         <TouchableOpacity
                             onPress={() => navigate("Tabs", { screen: "Home" })}
@@ -122,7 +122,7 @@ const HomeStack = ({ navigation: { navigate } }) => {
                 name="AlarmPage"
                 component={AlarmPage}
                 options={{
-                    title: "알람",
+                    title: "알림",
                     headerLeft: () => (
                         <TouchableOpacity
                             onPress={() => navigate("Tabs", { screen: "Home" })}
@@ -130,7 +130,7 @@ const HomeStack = ({ navigation: { navigate } }) => {
                             <Ionicons name="chevron-back" size={20} color="black" />
                         </TouchableOpacity>
                     ),
-                    headerShown:true
+                    headerShown:true,
                 }}
             />
             <NativeStack.Screen

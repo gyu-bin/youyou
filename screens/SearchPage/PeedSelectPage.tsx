@@ -280,7 +280,7 @@ export default function PeedSelectPage(){
         hours: today.getHours(), //현재 시간
         minutes: today.getMinutes(), //현재 분
     };
-    let timestring = `${time.year}/${time.month}/${time.date} ${time.hours}:${time.minutes}`;
+    let timestring = `${time.year}/${time.month}/${time.date}`;
     const getSearch = () => {
         const result = [];
         for (let i = 0; i < 4; ++i) {

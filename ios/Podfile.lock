@@ -3,28 +3,28 @@ PODS:
   - boost-for-react-native (1.63.0)
   - CocoaAsyncSocket (7.6.5)
   - DoubleConversion (1.1.6)
-  - EXApplication (4.0.2):
+  - EXApplication (4.0.1):
     - ExpoModulesCore
   - EXBlur (11.0.0):
     - ExpoModulesCore
-  - EXConstants (13.1.1):
+  - EXConstants (13.0.1):
     - ExpoModulesCore
-  - EXErrorRecovery (3.0.5):
+  - EXErrorRecovery (3.0.4):
     - ExpoModulesCore
-  - EXFileSystem (13.1.4):
+  - EXFileSystem (13.1.2):
     - ExpoModulesCore
-  - EXFont (10.0.5):
+  - EXFont (10.0.4):
     - ExpoModulesCore
   - EXImagePicker (12.0.2):
     - ExpoModulesCore
-  - EXKeepAwake (10.0.2):
+  - EXKeepAwake (10.0.1):
     - ExpoModulesCore
-  - Expo (44.0.6):
+  - Expo (44.0.5):
     - ExpoModulesCore
-  - ExpoModulesCore (0.6.5):
+  - ExpoModulesCore (0.6.4):
     - React-Core
     - ReactCommon/turbomodule/core
-  - EXSplashScreen (0.14.2):
+  - EXSplashScreen (0.14.1):
     - ExpoModulesCore
     - React-Core
   - FBLazyVector (0.64.3)
@@ -319,7 +319,7 @@ PODS:
     - React-jsi (= 0.64.3)
     - React-perflogger (= 0.64.3)
   - React-jsinspector (0.64.3)
-  - react-native-image-picker (4.8.4):
+  - react-native-image-picker (4.7.3):
     - React-Core
   - react-native-pager-view (5.4.9):
     - React-Core
@@ -391,13 +391,24 @@ PODS:
     - React-cxxreact (= 0.64.3)
     - React-jsi (= 0.64.3)
     - React-perflogger (= 0.64.3)
-  - RNCAsyncStorage (1.17.6):
+  - RNCAsyncStorage (1.17.5):
     - React-Core
   - RNCPicker (2.2.1):
     - React-Core
-  - RNGestureHandler (2.4.2):
+  - RNDateTimePicker (6.2.0):
     - React-Core
-  - RNReanimated (2.8.0):
+  - RNGestureHandler (2.5.0):
+    - React-Core
+  - RNImageCropPicker (0.38.0):
+    - React-Core
+    - React-RCTImage
+    - RNImageCropPicker/QBImagePickerController (= 0.38.0)
+    - TOCropViewController
+  - RNImageCropPicker/QBImagePickerController (0.38.0):
+    - React-Core
+    - React-RCTImage
+    - TOCropViewController
+  - RNReanimated (2.9.1):
     - DoubleConversion
     - FBLazyVector
     - FBReactNativeSpec
@@ -429,6 +440,7 @@ PODS:
     - React-RCTImage
   - RNVectorIcons (9.1.0):
     - React-Core
+  - TOCropViewController (2.6.1)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -500,7 +512,9 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
+  - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - RNImageCropPicker (from `../node_modules/react-native-image-crop-picker`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
@@ -529,6 +543,7 @@ SPEC REPOS:
     - KakaoSDKUser
     - libevent
     - OpenSSL-Universal
+    - TOCropViewController
     - YogaKit
 
 EXTERNAL SOURCES:
@@ -622,8 +637,12 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-async-storage/async-storage"
   RNCPicker:
     :path: "../node_modules/@react-native-picker/picker"
+  RNDateTimePicker:
+    :path: "../node_modules/@react-native-community/datetimepicker"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
+  RNImageCropPicker:
+    :path: "../node_modules/react-native-image-crop-picker"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
@@ -638,19 +657,19 @@ SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
-  EXApplication: 54fe5bd6268d697771645e8f1aef8b806a65247a
+  EXApplication: bdc8dc27713235565da1029a34385229f31b8e08
   EXBlur: 82055865de17cf2cf797ff064c50fb59fcbe703f
-  EXConstants: fdbe52259365b6a6faaa5e99a3b82cfa6bc2eb61
-  EXErrorRecovery: b0d7582714a2cc896e94a2308a356f94dbf14ef7
-  EXFileSystem: 08a3033ac372b6346becf07839e1ccef26fb1058
-  EXFont: 2597c10ac85a69d348d44d7873eccf5a7576ef5e
+  EXConstants: 6966f4fa7a22770dd240a66d029819ff94c748c9
+  EXErrorRecovery: deea88a01d38f8b1c1181b4e1d179b0ba0e4bb5b
+  EXFileSystem: e8013deaa114cab168a6f53be956b9334c3d02cf
+  EXFont: 1fb13af43dc517c01c0ff21a6e32f9f9bf2ea602
   EXImagePicker: bf4d62532cc2bf217edbe4abbb0014e73e079eac
-  EXKeepAwake: bf48d7f740a5cd2befed6cf9a49911d385c6c47d
-  Expo: 534e51e607aba8229293297da5585f4b26f50fa1
-  ExpoModulesCore: 32c0ccb47f477d330ee93db72505380adf0de09a
-  EXSplashScreen: 21669e598804ee810547dbb6692c8deb5dd8dbf3
+  EXKeepAwake: b571c2ad8323b2fced6e907766e2549f75119471
+  Expo: 337c72b7e9314e93023af79c875930db8e008275
+  ExpoModulesCore: 64abda7af7cf659d2fa092934e29c6f4ea7e849f
+  EXSplashScreen: 7872675b95bb07c25f922b3d3dfae70c76fb5a00
   FBLazyVector: c71c5917ec0ad2de41d5d06a5855f6d5eda06971
-  FBReactNativeSpec: 8336a595d5c35694be6b27b3453f70d585bec3ae
+  FBReactNativeSpec: d113b5991ba68a7b65391ab5ba87d3598167664d
   Flipper: d3da1aa199aad94455ae725e9f3aa43f3ec17021
   Flipper-DoubleConversion: 38631e41ef4f9b12861c67d17cb5518d06badc41
   Flipper-Folly: 755929a4f851b2fb2c347d533a23f191b008554c
@@ -682,7 +701,7 @@ SPEC CHECKSUMS:
   React-jsi: a8b09c29521c798f1783348b37b511ba7b3dbeb3
   React-jsiexecutor: df6abc9fafbecb8e5b7a5fbc5e6d4bd017d594d5
   React-jsinspector: 34e23860273a23695342f58eed3ffd3ba10c31e0
-  react-native-image-picker: cffb727cf2f59bd5c0408e30b3dbe0b935f88835
+  react-native-image-picker: 4e6008ad8c2321622affa2c85432a5ebd02d480c
   react-native-pager-view: 3ee7d4c7697fb3ef788346e834a60cca97ed8540
   react-native-pinchable: b4381b0807d15c12b14bfacd927128f52d96f0f1
   react-native-safe-area-context: 584dc04881deb49474363f3be89e4ca0e854c057
@@ -698,12 +717,15 @@ SPEC CHECKSUMS:
   React-RCTVibration: c7f845861e79eae13dc1e8217a3cf47a3945b504
   React-runtimeexecutor: 493d9abb8b23c3f84e19ae221eeba92cadcb70dc
   ReactCommon: 8fea6422328e2fc093e25c9fac67adbcf0f04fb4
-  RNCAsyncStorage: 466b9df1a14bccda91da86e0b7d9a345d78e1673
+  RNCAsyncStorage: 81187912cc9a5c2591ddb161e03e587688afb764
   RNCPicker: cb57c823d5ce8d2d0b5dfb45ad97b737260dc59e
-  RNGestureHandler: 61628a2c859172551aa2100d3e73d1e57878392f
-  RNReanimated: 7f3eef39b48facdb0b053873abdaafaa6a953b0d
+  RNDateTimePicker: 30e6733efc179d1e49d6008ea5fce42cdc9aeeca
+  RNGestureHandler: bad495418bcbd3ab47017a38d93d290ebd406f50
+  RNImageCropPicker: ffbba608264885c241cbf3a8f78eb7aeeb978241
+  RNReanimated: ae29a663c40a983e7fa42bff49073d329f0cffb4
   RNScreens: d6da2b9e29cf523832c2542f47bf1287318b1868
   RNVectorIcons: 7923e585eaeb139b9f4531d25a125a1500162a0b
+  TOCropViewController: edfd4f25713d56905ad1e0b9f5be3fbe0f59c863
   Yoga: e6ecf3fa25af9d4c87e94ad7d5d292eedef49749
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 

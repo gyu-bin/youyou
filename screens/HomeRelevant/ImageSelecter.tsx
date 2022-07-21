@@ -286,7 +286,7 @@ const ImageSelecter: React.FC<ImageSelecterProps> = ({
 
     const createPeed = async () => {
         try {
-            const res = await fetch(`http://localhost:8080/api/feeds`, {
+            const res = await fetch(`http://3.39.190.23:8080/api/clubs`, {
                 method: "POST",
                 headers: {
                     "content-type": "multipart/form-data",

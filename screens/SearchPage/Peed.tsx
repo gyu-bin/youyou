@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, FlatList, TouchableOpacity, Button, Text, Image} from 'react-native';
 import {StatusBar} from "expo-status-bar";
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
+import { useNavigation } from '@react-navigation/native';
+import PeedSelectPage from "./PeedSelectPage";
 //img
-import {Searchbar} from "react-native-paper";
 import styled from "styled-components/native";
 import axios from "axios";
+
 
 const Wrapper = styled.View`
   flex: 1;
@@ -41,7 +41,8 @@ const ImageScroll=styled.ScrollView`
   width: 100%;
 `
 const ImageVIew=styled.TouchableOpacity`
-  flex-direction: row;
+  display: flex;
+  flex-direction: column;
   width: 100%;
 `
 
@@ -50,7 +51,9 @@ const Img=styled.Image`
   height: 110px;
   margin: 1px;
 `
-export default function Peed(){
+export default function Peed({navigation}){
+
+    //const navigation = useNavigation();
 
     const [text,onChangeText]=React.useState("");
     const [searchQuery, setSearchQuery] = React.useState('');
@@ -109,9 +112,9 @@ export default function Peed(){
         setRefreshing(false);
     };
 
+
     return (
         <Container>
-            <StatusBar style="auto"/>
             <Screen>
                 <Wrapper>
                     <FlatList
@@ -121,7 +124,7 @@ export default function Peed(){
                         keyExtractor={(item, index) => index + ""}
                         renderItem={({item})=>(
                             <ImageScroll>
-                                <ImageVIew>
+                                <ImageVIew onPress={()=>navigation.navigate('PeedSelectPage')}>
                                     <Img source={{uri: item.thumbnail}}/>
                                 </ImageVIew>
                             </ImageScroll>

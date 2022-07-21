@@ -136,12 +136,12 @@ const ClubCreationStepTwo: React.FC<ClubCreationStepTwoScreenProps> = ({
   const [imageURI, setImageURI] = useState<string | null>(null);
 
   const { width: SCREEN_WIDTH } = useWindowDimensions();
-  const imageHeight = Math.floor(((SCREEN_WIDTH * 0.8) / 16) * 9);
+  const imageHeight = Math.floor(((SCREEN_WIDTH * 0.8) / 4) * 3);
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: false,
       aspect: [16, 9],
       quality: 1,
     });
@@ -216,7 +216,7 @@ const ClubCreationStepTwo: React.FC<ClubCreationStepTwoScreenProps> = ({
               <FieldContentLine>
                 <Button
                   onPress={() => {
-                    if (!limitCheck) setClubMemberCount(-1);
+                    if (!limitCheck) setClubMemberCount(0);
                     setLimitCheck(!limitCheck);
                   }}
                   activeOpacity={0.5}

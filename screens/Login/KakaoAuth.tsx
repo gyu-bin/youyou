@@ -40,39 +40,39 @@ const Logo = styled.ImageBackground`
 `;
 
 const KakaoAuth = () => {
-    const navigation = useNavigation();
-    const dispatch = useDispatch();
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
 
-    const mutation = useMutation(CommonApi.getJWT, {
-        onSuccess: (res) => {
-            // redux 저장
-            dispatch(Login(res.token));
-        },
-        onError: (error) => {
-            console.log("--- Error ---");
-            console.log(error);
-            // Toast Message 출력.
-        },
-    });
+  const mutation = useMutation(CommonApi.getJWT, {
+    onSuccess: (res) => {
+      // redux 저장
+      dispatch(Login(res.token));
+    },
+    onError: (error) => {
+      console.log("--- Error ---");
+      console.log(error);
+      // Toast Message 출력.
+    },
+  });
 
-    const signInWithKakao = async () => {
-        const token: KakaoOAuthToken = await kakaoLogin();
+  const signInWithKakao = async () => {
+    const token: KakaoOAuthToken = await kakaoLogin();
 
-        mutation.mutate({ token: token.accessToken });
-    };
+    mutation.mutate({ token: token.accessToken });
+  };
 
-    return (
-        <Container>
-            <Logo
-                source={require("../../assets/logo.png")} //이미지경로
-                resizeMode="center" // 'cover', 'contain', 'stretch', 'repeat', 'center' 중 선택
-            ></Logo>
-            <KakaoButton onPress={signInWithKakao}>
-                <KakaoImage source={require("../../assets/kakao_logo.png")} resizeMode="cover" />
-                <Title>카카오로 시작하기</Title>
-            </KakaoButton>
-        </Container>
-    );
+  return (
+    <Container>
+      <Logo
+        source={require("../../assets/logo.png")} //이미지경로
+        resizeMode="center" // 'cover', 'contain', 'stretch', 'repeat', 'center' 중 선택
+      ></Logo>
+      <KakaoButton onPress={signInWithKakao}>
+        <KakaoImage source={require("../../assets/kakao_logo.png")} resizeMode="cover" />
+        <Title>카카오로 시작하기</Title>
+      </KakaoButton>
+    </Container>
+  );
 };
 
 export default KakaoAuth;

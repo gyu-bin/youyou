@@ -38,18 +38,41 @@ const Container = styled.SafeAreaView`
   position: relative;
   flex-direction: column;
   height: 100%;
-  top: 5%;
 `;
 
+const MainLogo=styled.View`
+  flex-direction: row;
+  display: flex;
+  height: 50px;
+  left: 30px;
+  background-color: white;
+`
+
 const LogoImage=styled.Image`
-  width: 35px;
-  height: 35px;
-  border-radius: 100px;
+  width: 26.8px;
+  height: 26.3px;
+  flex-grow: 0;
+  margin: 3.1px 0 0;
+  padding: 6.3px 7.2px 5.3px 7px;
+  transform: rotate(-359.63deg);
+  background-color: #295af5;
   top: 3%;
+  border-radius: 100px;
+`
+const LogoText=styled.Text`
+  margin: 10px 0 0 5px;
+  font-size: 26px;
+  font-weight: bold;
+  font-style: normal;
+  text-align: center;
+  color: #020202;
 `
 const AlamrIcon=styled.View`
-  left: 152px;
-  top: 12px;
+  width: 19px;
+  height: 19px;
+  margin: 15px 20px 8px 10px;
+  left: 335%;
+  top: 1%;
 `
 const Loader = styled.View`
   flex: 1;
@@ -60,14 +83,6 @@ const Loader = styled.View`
 const MainArea=styled.View`
   justify-content: space-between;
   margin-bottom: 5%;
-`
-
-const MainLogo=styled.View`
-  flex-direction: row;
-  display: flex;
-  height: 50px;
-  left: 20px;
-  background-color: white;
 `
 const PlusFeed=styled.Button`
   color: white;
@@ -90,35 +105,47 @@ const MainText=styled.View`
 `
 
 const UserImage=styled.Image`
-  width: 45px;
-  height: 45px;
+  width: 42.5px;
+  height: 42.5px;
   border-radius: 100px;
+  flex-grow: 0;
+  background-color: #c4c4c4;
 `
 
 const UserId=styled.Text`
   color: black;
   font-weight: bold;
-  font-size: 15px;
+  font-size: 14px;
   margin-left: 10px;
 `
 const CtrgArea=styled.View`
-  margin-left: 5px;
-  background-color: lightgray;
-  border-radius: 5px;
-  top: 2px;
+  width: 57px;
+  height: 15px;
+  flex-grow: 0;
+  margin: 0.1px 153px 13.9px 8px;
+  padding: 0.9px 0 1.1px;
+  border-radius: 3px;
+  background-color: #c4c4c4;
 `
 const CtgrText= styled.TouchableOpacity`
   margin: 3px 5px 3px 5px;
 `
 
 const ProjectNm=styled.Text`
-  color: white;
-  font-size: 10px;
+  width: 48px;
+  height: 13px;
+  top: -2px;
+  flex-grow: 0;
+  font-size: 9px;
+  font-weight: 500;
+  font-style: normal;
+  letter-spacing: -0.41px;
+  text-align: center;
+  color: #fff;
 `
 
 //ModalStyle
-const ModalStyle=styled.Modal`
-`
+
 const PeedId=styled.Text`
   color: black;
   font-size: 15px;
@@ -150,6 +177,7 @@ const LikeMent=styled.Text`
 
 const LikeArea=styled.View`
   flex-direction: row;
+  left: 5px;
 `
 const ReplyArea=styled.View`
   flex-direction: row;
@@ -157,10 +185,10 @@ const ReplyArea=styled.View`
 const DataArea=styled.View`
 `
 const DataText=styled.Text`
-  color: grey;
+  color: #9a9a9a;
   font-size: 10px;
-  left: 205px;
-
+  left: 200px;
+  top: -5px;
 `
 const BoldText1=styled.TouchableOpacity`
   font-weight: bold;
@@ -184,8 +212,10 @@ const MentId=styled.Text`
 
 const Ment = styled.Text`
   color: black;
-  margin-left: 2%;
-  width: 90%;
+  margin: 0 10px 0 10px;
+  width: 80%;
+  font-size: 12px;
+  left: 9px;
 `
 
 const HashTag=styled.Text`
@@ -204,12 +234,15 @@ const OptionArea = styled.View`
 //ModalStyle
 
 const ModalArea = styled.View`
-  width: 95%;
+  width: 18px;
+  height: 18px;
+  margin: 2px 0 9px 21px;
 `
 
 const ModalIcon=styled.TouchableOpacity`
   top: 20px;
-  left: 190px;
+  left: 30px;
+  height: 30px;
 `
 const CenteredView=styled.View`
   flex: 1;
@@ -218,21 +251,22 @@ const CenteredView=styled.View`
 `
 
 const ModalView=styled.View`
-  background-color: grey;
+  background-color: white;
   border-radius: 20px;
   padding: 35px;
   align-items: center;
   opacity: 0.9;
   width: 100%;
+  height: 40%;
 `
 
 const ModalText=styled.Text`
   font-weight: bold;
   text-align: center;
-  color: white;
   font-size: 20px;
   margin: 15px;
-  width: 90%;
+  width: 120%;
+  color: black;
 `
 const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get("window");
 
@@ -255,8 +289,8 @@ const ModalBtn=styled.View`
 
 const FloatingButton = styled.TouchableOpacity`
   position: absolute;
-  right: 20px;
-  bottom: 94%;
+  right: 25px;
+  top: 2%;
   width: 30px;
   height: 30px;
   background-color: white;
@@ -489,14 +523,9 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
             <Wrapper>
                 <MainLogo>
                     <LogoImage source={{uri: 'https://i.pinimg.com/564x/cd/c9/a5/cdc9a5ffec176461e7a1503d3b2553d4.jpg'}}/>
-                    <Text style={{
-                        color:'black',
-                        fontSize: 35,
-                        fontWeight: '500',
-                        left: 10
-                    }}>OnYou</Text>
+                    <LogoText>OnYou</LogoText>
                     <AlamrIcon>
-                        <Icon name="md-notifications-outline" onPress={goToAlarm} size={28} color="black" />
+                        <Icon name="md-notifications-outline" onPress={goToAlarm} size={19} color="black" />
                     </AlamrIcon>
                 </MainLogo>
                 <FlatList refreshing={refreshing} onRefresh={onRefresh} keyExtractor={(item, index) => index + ""} data={Home} renderItem={()=>(
@@ -544,7 +573,7 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
                                             <CenteredView onTouchEnd={closeModal}>
                                                 <ModalView>
                                                     <ModalText onPress={goToModifiy}>수정</ModalText>
-                                                    <ModalText onPress={deleteCheck}>삭제</ModalText>
+                                                    <ModalText style={{color: 'red'}} onPress={deleteCheck}>삭제</ModalText>
                                                     <ModalText onPress={goToAccusation}>신고</ModalText>
                                                     <ModalText onPress={closeModal}>Close</ModalText>
                                                 </ModalView>
@@ -559,7 +588,7 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
                                     containerStyle={{
                                         marginLeft: 20,
                                         marginRight: 20,
-                                        top: -4
+                                        top: -10
                                     }}
                                 >
                                     {mainImg.map((bundle, index) => {
@@ -569,7 +598,7 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
                                                     return (
                                                         <ImgItem key={index}>
                                                             <SliderBox  images={[
-                                                                "https://i.pinimg.com/736x/69/01/fa/6901fa625a250d1a0bf42dd97b941d86.jpg",
+                                                                "https://i.pinimg.com/564x/5c/4b/96/5c4b96e7e16aef00a926b6be209a7e3c.jpg",
                                                                 "https://i.pinimg.com/564x/e8/7f/50/e87f50bb77134487ce107966f7fc26a9.jpg",
                                                                 "https://i.pinimg.com/564x/23/58/ec/2358ec9140ebe494df99beedf70c6c33.jpg",
                                                                 "https://i.pinimg.com/564x/0f/6a/13/0f6a13baac82b80f5b1a1d4d9e20e479.jpg",
@@ -595,7 +624,7 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
                                             {heartSelected ? (
                                                 <Ionicons name="md-heart" size={20} color="red" />
                                             ) : (
-                                                <Ionicons name="md-heart-outline" size={20} color="red" />
+                                                <Ionicons name="md-heart-outline" size={20} color="black" />
                                             )}
                                         </TouchableOpacity>
                                         <BoldText2>{number}</BoldText2>
@@ -603,10 +632,10 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
                                     <ReplyArea>
                                         <TouchableOpacity onPress={goToReply}>
                                             <Icon name="md-chatbox-ellipses-outline" size={20} color='black'
-                                                  style={{left: 4}}
+                                                  style={{left: 10}}
                                             />
                                         </TouchableOpacity>
-                                        <Text style={{left: 5, fontWeight: 'normal', fontSize: 13}}>{rand(1,100)}</Text>
+                                        <Text style={{left: 10, fontWeight: 'normal', fontSize: 13}}>{rand(1,100)}</Text>
                                     </ReplyArea>
                                 </View>
                                 <DataArea>
@@ -643,9 +672,11 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
                             </View>*/}
                             {/*<MentId>유주은</MentId>*/}
                             <Ment>디자인 이쁘다.
-                                <HashTag onPress={mentionHashtagClick}>#잘 뽑혔구먼 </HashTag>
+                            <HashTag onPress={mentionHashtagClick}>#잘 뽑혔구먼 </HashTag>
                                 디자인 이쁘다.
-                                <HashTag onPress={mentionHashtagClick}>#배고프다.</HashTag>
+                            <HashTag onPress={mentionHashtagClick}>#배고프다.</HashTag>
+                                디자인 이쁘다.
+                            <HashTag onPress={mentionHashtagClick}>#배고프다.</HashTag>
                                 디자인 이쁘다.
                             </Ment>
                         </ContentMent>
@@ -653,7 +684,7 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
                 )}>
                 </FlatList>
                 <FloatingButton onPress={goToContent}>
-                    <Icon name="md-image-outline" size={28} color="black"/>
+                    <Icon name="md-image-outline" size={19} color="black"/>
                 </FloatingButton>
             </Wrapper>
         </Container>

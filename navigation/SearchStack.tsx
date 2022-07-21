@@ -1,7 +1,6 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Tabs from "./Tabs";
-import Peed from "../screens/SearchPage/Peed";
 import PeedSelectPage from "../screens/SearchPage/PeedSelectPage";
 import {Text, TouchableOpacity} from "react-native";
 import {Ionicons} from "@expo/vector-icons";
@@ -20,18 +19,16 @@ const SearchStack = ({ navigation: { navigate } }) => {
                 name="PeedSelectPage"
                 component={PeedSelectPage}
                 options={{
-                    title: "1",
+                    title: "태그선택",
                     headerLeft: () => (
                         <TouchableOpacity
-                            onPress={() => navigate("Tabs", { screen: "Peed" })}
+                            onPress={() => navigate("Tabs", { screen: "Home" })}
                         >
                             <Ionicons name="chevron-back" size={20} color="black" />
                         </TouchableOpacity>
                     ),
                 }}
             />
-
-
         </NativeStack.Navigator>
     );
 }

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Keyboard, TouchableWithoutFeedback } from "react-native";
 import { useMutation } from "react-query";
+import { useSelector } from "react-redux";
 import styled from "styled-components/native";
 import { ClubApi, ClubCreationRequest } from "../../api";
 import { ClubCreationStepThreeScreenProps } from "../../types/club";
@@ -96,38 +97,40 @@ const ClubCreationStepThree: React.FC<ClubCreationStepThreeScreenProps> = ({
   },
   navigation: { navigate },
 }) => {
+  const token = useSelector((state) => state.AuthReducers.authToken);
   const [briefIntroText, setBriefIntroText] = useState<string>("");
   const [detailIntroText, setDetailIntroText] = useState<string>("");
 
   const mutation = useMutation(ClubApi.createClub, {
-    onMutate: (data) => {
-      console.log("--- Mutate ---");
-      console.log(data);
-    },
-    onSuccess: (data) => {
-      console.log("--- Success ---");
-      console.log(data);
+    onSuccess: (res) => {
+      if (res.status === 200 && res.json?.resultCode === "OK") {
+        return navigate("ClubCreationSuccess", {
+          clubData: res.json?.data,
+        });
+      } else {
+        console.log(`mutation success but please check status code`);
+        console.log(`status: ${res.status}`);
+        console.log(res.json);
+        return navigate("ClubCreationFail", {});
+      }
     },
     onError: (error) => {
       console.log("--- Error ---");
-      console.log(error);
+      console.log(`error: ${error}`);
+      return navigate("ClubCreationFail", {});
     },
-    onSettled: (data, error) => {
-      console.log("--- Settled ---");
-      console.log(data);
-      console.log(error);
-    },
+    onSettled: (res, error) => {},
   });
 
   const onSubmit = () => {
-    console.log("category1: " + category1);
-    console.log("category2: " + category2);
-    console.log("clubName: " + clubName);
-    console.log("clubMemberCount: " + clubMemberCount);
-    console.log("briefIntroText: " + briefIntroText);
-    console.log("detailIntroText " + detailIntroText);
-    console.log("approvalMethod " + approvalMethod);
-    console.log("imageURI " + imageURI);
+    // console.log("category1: " + category1);
+    // console.log("category2: " + category2);
+    // console.log("clubName: " + clubName);
+    // console.log("clubMemberCount: " + clubMemberCount);
+    // console.log("briefIntroText: " + briefIntroText);
+    // console.log("detailIntroText " + detailIntroText);
+    // console.log("approvalMethod " + approvalMethod);
+    // console.log("imageURI " + imageURI);
 
     const data = {
       category1Id: category1,
@@ -146,21 +149,19 @@ const ClubCreationStepThree: React.FC<ClubCreationStepThreeScreenProps> = ({
         ? {
             image: null,
             data,
+            token,
           }
         : {
             image: {
-              uri: imageURI,
+              uri: imageURI.replace("file://", ""),
               type: "image/jpeg",
               name: splitedURI[splitedURI.length - 1],
             },
             data,
+            token,
           };
 
     mutation.mutate(requestData);
-
-    // 결과값 받아서 한번 더 화면 분기할 것.
-
-    return navigate("Tabs", { screen: "Clubs" });
   };
 
   return (

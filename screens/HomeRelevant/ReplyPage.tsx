@@ -9,20 +9,23 @@ import {
     TextInput,
     Alert,
     Animated,
-    ActivityIndicator
+    ActivityIndicator, Image
 } from 'react-native';
 import styled from "styled-components/native";
 import {Ionicons} from "@expo/vector-icons";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import axios from 'axios';
-
+import { Dimensions } from 'react-native';
 const Container = styled.SafeAreaView`
   flex: 1;
   height: 100%;
   position: absolute;
   width: 100%;
-  
 `;
+
+const ReplyContainer=styled.View`
+  height: 100%;
+`
 
 const LogoImage=styled.Image`
   width: 40px;
@@ -60,30 +63,25 @@ const UnderBar = styled.View`
   border-bottom-width: 1px;
 `
 
-const ContentArea = styled.View`
-  flex: 1;
-  flex-direction: column;
-  left: 20px;
-  top: 10px;
-  width: 100%;
-`
-
 const CommentArea = styled.View`
   flex: 1;
-  flex-direction: column;
+  flex-direction: row;
   width: 100%;
+  top: 6px;
+  margin: 10px 20px 0 20px;
 `
 
 const CommentImg=styled.Image`
-  width: 40px;
-  height: 40px;
+  width: 46px;
+  height: 46px;
   border-radius: 100px;
+  flex-grow: 0;
+  background-color: #c4c4c4;
 `
 const CommentId=styled.Text`
   color: black;
-  font-size: 15px;
-  left: 10px;
-  top: 10px;
+  font-size: 12px;
+  left: 8px;
   font-weight: bold;
 `
 
@@ -91,22 +89,25 @@ const Comment = styled.Text`
   color: black;
   margin-left: 10px;
   width: 200px;
-  left: 10px;
-  top: 10px;
+  left: 5px;
+  font-size: 12px;
+  font-weight: 300;
 `
 
 const CommentMent = styled.View`
   flex-direction: row;
-  justify-content: flex-start;
+
 `
 
 const CommentRemainder = styled.View`
   flex-direction: row;
-  justify-content: space-evenly;
 `
 
 const Time = styled.Text`
-  justify-content: flex-start;
+  font-size: 10px;
+  font-weight: 300;
+  color: #8e8e8e;
+  left: 9px;
 `
 
 const Like = styled.Text`
@@ -120,7 +121,40 @@ const FieldInput = styled.TextInput`
   width: 100%;
 `;
 
+const ReplyArea=styled.View`
+  display: flex;
+  flex-direction: row;
+  padding: 10px 0 10px 20px;
+  border: solid 0.5px #c4c4c4;
+  bottom: 0;
+`
+
+const ReplyInput=styled.TextInput`
+  color: #b0b0b0;
+  left: 15px;
+`
+
+const ReplyImg=styled.Image`
+  width: 30px;
+  height: 30px;
+  border-radius: 100px;
+`
+
+const ReplyButton=styled.TouchableOpacity`
+`
+const ReplyDone=styled.Text`
+  color: #63abff;
+  font-size: 15px;
+  font-weight: bold;
+  left: 550%;
+  width: 30px;
+  height: 24px;
+  top: 15%;
+`
 const rand = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
+
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 
 const ReplyPage:React.FC<NativeStackScreenProps<any, "ReplyPage">> = ({
                                                                 navigation: { navigate },
@@ -199,20 +233,7 @@ const ReplyPage:React.FC<NativeStackScreenProps<any, "ReplyPage">> = ({
 
     return(
         <Container>
-            <TitleView>
-                <LogoImage source={{uri: 'https://i.pinimg.com/564x/79/3b/74/793b74d8d9852e6ac2adeca960debe5d.jpg'}}/>
-                <ContentArea>
-                    <ContentMent>
-                        <MentId>Gyubin</MentId>
-                        <Ment>123</Ment>
-                    </ContentMent>
-                    <View>
-                        <Time>40분</Time>
-                    </View>
-                </ContentArea>
-            </TitleView>
-                <UnderBar/>
-            <View>
+            <ReplyContainer>
                 {loading ? <ActivityIndicator/> : (
                         <FlatList
                             refreshing={refreshing}
@@ -221,30 +242,34 @@ const ReplyPage:React.FC<NativeStackScreenProps<any, "ReplyPage">> = ({
                             keyExtractor={(item, index) => index + ""}
                             renderItem={({ item }) => (
                                 <CommentArea>
-                                    <View>
-                                        <CommentMent>
-                                            <CommentImg source={{uri: 'https://i.pinimg.com/564x/13/05/7c/13057c33d7ad3f50ea99bc44b388ebcb.jpg'}}/>
+                                    {/*<CommentImg source={{uri: 'https://i.pinimg.com/564x/13/05/7c/13057c33d7ad3f50ea99bc44b388ebcb.jpg'}}/>*/}
+                                    <CommentImg source={{uri:item.thumbnail}}/>
+                                    <View style={{marginBottom: 20, top: 7}}>
+                                       <CommentMent>
                                             <CommentId>{item.name}</CommentId>
-                                            <Comment>{item.organizationName}</Comment>
+                                            <Comment>{item.creatorName}</Comment>
                                         </CommentMent>
                                         <CommentRemainder>
-                                            {/*<Time>{rand(1,60)}분</Time>*/}
-                                            <Time>{item.creatorName}</Time>
-                                            <Like>좋아요 {rand(1,100)} 개</Like>
-                                            <TouchableOpacity onPress={() => setHeartSelected(!heartSelected)}>
-                                                {heartSelected ? (
-                                                    <Ionicons name="md-heart" size={24} color="red" />
-                                                ) : (
-                                                    <Ionicons name="md-heart-outline" size={24} color="red" />
-                                                )}
-                                            </TouchableOpacity>
+                                            <Time>{rand(1,60)}분 전</Time>
                                         </CommentRemainder>
                                     </View>
                                 </CommentArea>
                                                 )}
                                             />
                                     )}
-            </View>
+                <ReplyArea>
+                    <ReplyImg
+                        source={{uri: 'https://i.pinimg.com/564x/13/05/7c/13057c33d7ad3f50ea99bc44b388ebcb.jpg'}}/>
+                    <ReplyInput>
+                        댓글을 입력해보세요...
+                    </ReplyInput>
+                    <ReplyButton>
+                        <ReplyDone>
+                            게시
+                        </ReplyDone>
+                    </ReplyButton>
+                </ReplyArea>
+            </ReplyContainer>
             {/*<FlatList
                 data={Home}
                 refreshing={refreshing}
@@ -281,14 +306,14 @@ const ReplyPage:React.FC<NativeStackScreenProps<any, "ReplyPage">> = ({
                     </CommentArea>
                 )}
             />*/}
-            <FieldInput
+            {/*<FieldInput
                 clearButtonMode="always"
                 placeholder="댓글"
                 textAlign="center"
                 onChangeText={() => setReply}
                 returnKeyType="done"
                 returnKeyLabel="done" // for Android
-            />
+            />*/}
         </Container>
 
     )

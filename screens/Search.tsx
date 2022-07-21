@@ -61,23 +61,23 @@ const ClubHomeTopTabs=()=>{
                 {/*<SearchText placeholder="검색"/>*/}
             </SearchArea>
             <TopTab.Navigator
-            initialRouteName="ClubHome"
-            screenOptions={{ swipeEnabled: true
-            }}
-        >
-            <TopTab.Screen
-                options={{title: "모임"}}
-                name="ClubHome"
-                component={ClubHome}
-            />
-            <TopTab.Screen
-                options={{title: "피드"}}
-                name="Feed"
-                component={Feed}/>
-            <TopTab.Screen
-                options={{title: "태그"}}
-                name="Tag"
-                component={PeedSelect}/>
+                initialRouteName="ClubHome"
+                screenOptions={{ swipeEnabled: true
+                }}
+            >
+                <TopTab.Screen
+                    options={{title: "모임"}}
+                    name="ClubHome"
+                    component={ClubHome}
+                />
+                <TopTab.Screen
+                    options={{title: "피드"}}
+                    name="Feed"
+                    component={Feed}/>
+                <TopTab.Screen
+                    options={{title: "태그"}}
+                    name="Tag"
+                    component={PeedSelect}/>
             </TopTab.Navigator>
         </Wrapper>
     );
@@ -87,7 +87,7 @@ const Search = () => {
     return (
         <NativeStack.Navigator>
             <NativeStack.Screen
-                name="여기다가 어떻게 검색창 넣지"
+                name="."
                 component={ClubHomeTopTabs}
                 options={{
                     headerShown: false,
