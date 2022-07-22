@@ -1,23 +1,27 @@
 import React, {useEffect, useState} from 'react';
 import {
-    Alert, Image,
+    Alert, Image, ImageBackground,
     Keyboard,
     Pressable,
     Text,
     TextInput,
     TouchableWithoutFeedback,
     useWindowDimensions,
-    View,
-} from 'react-native';
+    View
+} from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 
 import styled from "styled-components/native";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import SelectDropdown from "react-native-select-dropdown";
 import axios from "axios";
-import {ClubApi, ClubCreationRequest, FeedCreateRequest, HomeApi} from "../../api";
+import {ClubApi, ClubCreationRequest} from "../../api";
 import {ImageSelecterProps} from "../../types/home";
 import {useMutation} from "react-query";
+import MultipleImagePicker from '@baronha/react-native-multiple-image-picker';
+import ImageCropPicker from 'react-native-image-crop-picker';
+import Icon from "react-native-vector-icons/Ionicons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 interface ValueInfo{
     str: string;
@@ -106,22 +110,40 @@ const ContentArea=styled.TextInput`
 
 const ImagePickerView = styled.View`
   width: 100%;
+    height: 50%;
   align-items: center;
 `;
 
+const PickBackground=styled.ImageBackground`
+  width: 100%;
+    height: 100%;
+    position: absolute;
+`
+
 const ImagePickerButton = styled.TouchableOpacity<{ height: number }>`
-  width: 95%;
-  border-radius: 10px;
-  height: 300px;
+  width: 100%;
+  height: 100%;
   justify-content: center;
   align-items: center;
   background-color: #c4c4c4;
 `;
 
+const ImageCrop=styled.View`
+    background-color: rgba(63, 63, 63, 0.7);
+    width: 142px;
+    height: 142px;
+    border-radius: 100px;
+    opacity: 0.5;
+    justify-content: center;
+    top: 30%;
+    left: 30%;
+`
+
 const ImagePickerText = styled.Text`
-  font-size: 21px;
-  font-weight: 600;
-  color: #2995fa;
+  font-size: 10px;
+    color: white;
+    text-align: center;
+    padding : 50px 0;
 `;
 
 const PickedImage = styled.Image<{ height: number }>`
@@ -129,6 +151,11 @@ const PickedImage = styled.Image<{ height: number }>`
   height: 300px;
   border-radius: 10px;
 `;
+
+const FeedText=styled.TextInput`
+    margin: 13px 15px 15px 30px;
+    color: #c0c0c0;
+`
 
 const ImageSelecter: React.FC<ImageSelecterProps> = ({
    /* route:{
@@ -140,19 +167,20 @@ const ImageSelecter: React.FC<ImageSelecterProps> = ({
     },*/
     navigation: { navigate },
     }) => {
-    const [image, setImage] = useState<string | null>(null);
+    const [images, setImages] = useState<string | null>(null);
     let [text, onChangeText]=useState("사진을 선택하세요")
     const [selectCategory, setCategory] = useState(null);
     const[displayName, setDisplayName]=useState('');
-    const [response, setResponse]=useState(null);
     const Stack = createNativeStackNavigator();
     const [refreshing, setRefreshing] = useState(false);
     const [loading, setLoading] = useState(true);
     const [data,setData]=useState([]);
     const [isSelect, setSelect] = useState([false, false, false]);
     //사진권한 허용
-    const [imageURI, setImageURI] = useState<string | null>(null);
+    const [imageURI, setImageURI] = useState<string | null>(true);
     const [status,requestPermission]= ImagePicker.useMediaLibraryPermissions();
+    const [showImages, setShowImages] = useState([]);
+    let [ alert, alertSet ] = useState(true);
 
     const getValueInfos = (value: string): ValueInfo[] => {
         if (value.length === 0) {
@@ -231,7 +259,7 @@ const ImageSelecter: React.FC<ImageSelecterProps> = ({
             setLoading(false);
         }
     };*/
-    const mutation = useMutation(HomeApi.createPeed, {
+/*    const mutation = useMutation(HomeApi.createPeed, {
         onMutate: (data) => {
             console.log("--- Mutate ---");
             console.log(data);
@@ -249,7 +277,7 @@ const ImageSelecter: React.FC<ImageSelecterProps> = ({
             console.log(data);
             console.log(error);
         },
-    });
+    });*/
 
     /*const onSubmit = () => {
       /!*  console.log("clubId1: " + clubId);
@@ -284,7 +312,7 @@ const ImageSelecter: React.FC<ImageSelecterProps> = ({
         return navigate("Tabs", { screen: "Home" });
     };*/
 
-    const createPeed = async () => {
+/*    const createPeed = async () => {
         try {
             const res = await fetch(`http://3.39.190.23:8080/api/clubs`, {
                 method: "POST",
@@ -304,7 +332,7 @@ const ImageSelecter: React.FC<ImageSelecterProps> = ({
             setLoading(false);
         }
     };
-/*    useEffect(()=>{
+    useEffect(()=>{
         // getCtrg();
         createPeed();
     },[]);*/
@@ -393,24 +421,32 @@ const ImageSelecter: React.FC<ImageSelecterProps> = ({
                         <ImagePickerButton
                             height={imageHeight}
                             onPress={pickImage}
-                            activeOpacity={0.8}
+                            activeOpacity={1}
                         >
                             {imageURI ? (
+                                // <PickedImage height={imageHeight} source={{ uri: imageURI }} />
                                 <PickedImage height={imageHeight} source={{ uri: imageURI }} />
                             ) : (
-                                <ImagePickerText>대표 사진 설정</ImagePickerText>
+                                  <PickBackground
+                                    source={{uri: 'https://i.pinimg.com/564x/5c/4b/96/5c4b96e7e16aef00a926b6be209a7e3c.jpg'}}>
+                                      <ImageCrop>
+                                          <MaterialCommunityIcons name="arrow-top-right-bottom-left" size={30} color="red"
+                                                                  style={{left: 55 , top:40}} />
+                                          <ImagePickerText>손가락을 좌우로{"\n"} 동시에 벌려{"\n"}  이미지 크롭을 해보세요</ImagePickerText>
+                                      </ImageCrop>
+                                  </PickBackground>
                             )}
                         </ImagePickerButton>
                     </ImagePickerView>
-
-                       {/* <ImageArea title={text? text: ""} onPress={pickImage}/>
-                        {image && <Circle source={{ uri: image }} style={{ width: 350, height: 300 }}
-                        />}*/}
-                    {/*</View>*/}
-                    <TextInput
-                        style={{ color: 'transparent', height: 100, borderStyle:'solid', borderColor: 'black'}}
-                        key={"FeedCreateRequest"}
-                        placeholder="글을 적어보세요!"
+                    <View>
+                        <Text>
+                            선택된 이미지 영역
+                        </Text>
+                    </View>    
+                        
+                    <FeedText
+                        // key={"FeedCreateRequest"}
+                        placeholder="사진과 함께 남길 게시글을 작성해 보세요."
                         onChangeText={setTitle}
                     >
                         {valueInfos.map(({ str, isHT, idxArr }, idx) => {
@@ -432,8 +468,8 @@ const ImageSelecter: React.FC<ImageSelecterProps> = ({
                                 </Text>
                             );
                         })}
-                    </TextInput>
-                    <OptionSelector>
+                    </FeedText>
+                    {/*<OptionSelector>
                         <CtgrArea>
                             <Text>내 모임</Text>
                             <SelectDropdown
@@ -450,8 +486,8 @@ const ImageSelecter: React.FC<ImageSelecterProps> = ({
                             />
 
                         </CtgrArea>
-                    </OptionSelector>
-                    <AllBtn>
+                    </OptionSelector>*/}
+                    {/*<AllBtn>
                         <ButtonArea>
                             <NextButton
                                 onPress={cancleCreate}>
@@ -461,25 +497,26 @@ const ImageSelecter: React.FC<ImageSelecterProps> = ({
                         <ButtonArea>
                             <NextButton
                                 onPress={() => {
-                                   /* if(imageURI===null) {
+                                    if(imageURI===null) {
                                         return Alert.alert("이미지를 선택하세요!");
                                     }
                                     else if(title===""){
                                         return Alert.alert("문구를 입력해라");
                                     }
-                                    /!*else if(!category){
+                                    else if(!category){
                                         return Alert.alert("카테고리를 선택하세요!");
-                                    }*!/
+                                    }
                                     else{
                                         createFinish();
-                                    }*/
+                                    }
                                     createFinish();
                                 }}
                             >
-                                <ButtonText onPress={createPeed}>공유하기</ButtonText>
+                                <ButtonText>공유하기</ButtonText>
                             </NextButton>
                         </ButtonArea>
-                    </AllBtn>
+                    </AllBtn>*/}
+
                 </Wrapper>
             </TouchableWithoutFeedback>
         </Container>

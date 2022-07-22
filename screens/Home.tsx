@@ -26,7 +26,7 @@ import Swiper from "react-native-swiper";
 import { SliderBox } from "react-native-image-slider-box";
 import axios from "axios";
 import Icon from "react-native-vector-icons/Ionicons";
-import {Ionicons} from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import  MentionHashtagTextView  from  "react-native-mention-hashtag-text";
 
 interface ValueInfo{
@@ -38,6 +38,7 @@ const Container = styled.SafeAreaView`
   position: relative;
   flex-direction: column;
   height: 100%;
+    top: 5%;
 `;
 
 const MainLogo=styled.View`
@@ -71,7 +72,7 @@ const AlamrIcon=styled.View`
   width: 19px;
   height: 19px;
   margin: 15px 20px 8px 10px;
-  left: 335%;
+  left: 330%;
   top: 1%;
 `
 const Loader = styled.View`
@@ -290,7 +291,7 @@ const ModalBtn=styled.View`
 const FloatingButton = styled.TouchableOpacity`
   position: absolute;
   right: 25px;
-  top: 2%;
+  top: 1.7%;
   width: 30px;
   height: 30px;
   background-color: white;
@@ -388,6 +389,12 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
             screen:"ModifiyPeed"
         })
         setModalVisible(!isModalVisible);
+    }
+
+    const goToClub=()=>{
+        navigate("HomeStack",{
+            screen:"MyClubSelector"
+        })
     }
 
     const goToAlarm=()=>{
@@ -683,8 +690,8 @@ const Home:React.FC<NativeStackScreenProps<any, "Home">> = ({
                     </MainArea>
                 )}>
                 </FlatList>
-                <FloatingButton onPress={goToContent}>
-                    <Icon name="md-image-outline" size={19} color="black"/>
+                <FloatingButton onPress={goToClub}>
+                    <MaterialIcons name="add-photo-alternate" size={20} color="black"/>
                 </FloatingButton>
             </Wrapper>
         </Container>

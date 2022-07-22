@@ -6,6 +6,7 @@ const Container = styled.SafeAreaView`
   position: relative;
   height: 100%;
   padding: 0 20px 0 20px;
+    top: 2%;
 `;
 
 const AlarmArea=styled.View`
@@ -42,8 +43,8 @@ export default function AlarmPage(){
                     <AlarmTime>30분전</AlarmTime>
                 </AlarmHeader>
                 <View>
-                    <AlarmText><Text style={{fontWeight: 'bold', fontSize: 15}}>김재광</Text>님의
-                        <Text style={{fontWeight: 'bold', fontSize: 15}}>온유프로젝트</Text> 가입 요청이
+                    <AlarmText><Text style={{fontWeight: 'bold', fontSize: 12}}>김재광</Text>님의
+                        <Text style={{fontWeight: 'bold', fontSize: 12}}>온유프로젝트</Text> 가입 요청이
                         수락되었습니다.</AlarmText>
                 </View>
             </AlarmArea>
@@ -53,8 +54,8 @@ export default function AlarmPage(){
                     <AlarmTime>1시간전</AlarmTime>
                 </AlarmHeader>
                 <View>
-                    <AlarmText><Text style={{fontWeight: 'bold', fontSize: 15}}>이진규</Text>님의
-                        <Text style={{fontWeight: 'bold', fontSize: 15}}>온유프로젝트</Text> 가입 요청이
+                    <AlarmText><Text style={{fontWeight: 'bold', fontSize: 12}}>이진규</Text>님의
+                        <Text style={{fontWeight: 'bold', fontSize: 12}}>온유프로젝트</Text> 가입 요청이
                         거절되었습니다.</AlarmText>
                 </View>
             </AlarmArea>

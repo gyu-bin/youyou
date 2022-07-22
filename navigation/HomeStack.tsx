@@ -9,6 +9,7 @@ import ImageSelecter from '../screens/HomeRelevant/ImageSelecter'
 import ReportComplete from '../screens/HomeRelevant/ReportComplete'
 import ReplyPage from '../screens/HomeRelevant/ReplyPage'
 import AlarmPage from "../screens/HomeRelevant/AlarmPage";
+import MyClubSelector from "../screens/HomeRelevant/MyClubSelector";
 import {Text, TouchableOpacity} from "react-native";
 import {Ionicons} from "@expo/vector-icons";
 
@@ -40,17 +41,39 @@ const HomeStack = ({ navigation: { navigate } }) => {
                 name="ImageSelecter"
                 component={ImageSelecter}
                 options={{
-                    title: "이미지 선택!",
+                    title: "",
                     headerLeft: () => (
                         <TouchableOpacity
-                            onPress={() => navigate("Tabs", { screen: "Home" })}
+                            onPress={() => navigate("HomeStack", { screen: "MyClubSelector" })}
                         >
-                            <Ionicons name="chevron-back" size={20} color="black" />
+                            <Ionicons name="chevron-back" size={25} color="black" />
                         </TouchableOpacity>
                     ),
+                  headerRight: () => (
+                    <TouchableOpacity
+                      onPress={() => navigate("Tabs", { screen: "Home" })}
+                    >
+                      <Text style={{color: '#2995fa'}}>저장</Text>
+                    </TouchableOpacity>
+                  ),
                     headerShown:true
                 }}
             />
+          <NativeStack.Screen
+            name="MyClubSelector"
+            component={MyClubSelector}
+            options={{
+              title: "나의 모임",
+              headerLeft: () => (
+                <TouchableOpacity
+                  onPress={() => navigate("Tabs", { screen: "Home" })}
+                >
+                  <Ionicons name="chevron-back" size={20} color="black" />
+                </TouchableOpacity>
+              ),
+              headerShown:true
+            }}
+          />
             <NativeStack.Screen
                 name="CreateHomePeed"
                 component={CreateHomePeed}
